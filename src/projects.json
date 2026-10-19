@@ -108,20 +108,27 @@
     "tag": "v0.3.2",
     "showcase": {
       "headline": "Something to watch. Something to read.",
-      "intro": "Everglow brings cinema, anime, books, and manga/manhwa together. Find something to watch tonight, catch up on what's airing, or pick your next read.",
+      "intro": "Everglow brings cinema, anime, and manga/manhwa together. Find something to watch tonight, catch up on what's airing, or pick your next read.",
       "features": [
+        "Cinema — films and series for tonight",
         "Anime — what's airing and trending",
-        "MangaCelestia — manga, manhwa and manhua",
-        "Books — classics and new finds"
+        "MangaCelestia — manga, manhwa and manhua"
       ],
-      "image": "everglow-anime-home.png",
-      "imageAlt": "Everglow's anime homepage with a trending show in the hero, its rating, genres and Watch Now controls.",
-      "imageCaption": "Anime homepage · live public catalogue at capture time.",
-      "imageWidth": 1310,
-      "imageHeight": 900,
+      "image": "everglow-cinema-home.png",
+      "imageAlt": "Everglow Cinema's homepage with a Trending Now row of film and series posters and the Top 10 in the Philippines.",
+      "imageCaption": "Cinema homepage · live catalogue, cropped to its public trending rows.",
+      "imageWidth": 1440,
+      "imageHeight": 660,
       "short": "Cinema, anime & reading",
       "tone": "plum",
       "scenes": [
+        {
+          "image": "everglow-cinema-home.png",
+          "imageAlt": "Everglow Cinema's homepage with a Trending Now row of film and series posters and the Top 10 in the Philippines.",
+          "imageCaption": "Cinema homepage · live catalogue, cropped to its public trending rows.",
+          "imageWidth": 1440,
+          "imageHeight": 660
+        },
         {
           "image": "everglow-anime-home.png",
           "imageAlt": "Everglow's anime homepage with a trending show in the hero, its rating, genres and Watch Now controls.",
@@ -135,13 +142,6 @@
           "imageCaption": "MangaCelestia homepage · live public catalogue, cropped to the top of the page.",
           "imageWidth": 1336,
           "imageHeight": 490
-        },
-        {
-          "image": "everglow-books-home.png",
-          "imageAlt": "Everglow's Books homepage with search, reading categories and a Most Popular shelf of classics.",
-          "imageCaption": "Books homepage · live public catalogue at capture time.",
-          "imageWidth": 1440,
-          "imageHeight": 742
         }
       ]
     }

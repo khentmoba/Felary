@@ -28,11 +28,11 @@ Feature captures are 1400 × 900 and include a visible DEMO DATA label. The nati
 
 Source repository HEAD when inspected: `4b63440c0a50effb69ccf97cffee58697ac143fa`. Homepages were captured fresh from a local run; source application files were not changed.
 
+- `everglow-cinema-home.png`: Everglow Cinema homepage rendered locally from the same build, signed in by the owner because the cinema catalogue requires an authenticated TMDB proxy; captured 2026-10-20 at 1440 × 900. Cropped to the public Trending Now and Top 10 rows (1440 × 660), removing the account avatar, Continue Watching, personalised picks and a snackbar. No credentials or private screens.
 - `everglow-anime-home.png`: Everglow anime homepage rendered locally from Everglow HEAD `4b63440` in agent mode (cinema-guest profile), live public catalogue, captured 2026-10-20 at 1440 × 900; cropped to 1310 × 900 to remove the guest account label. No credentials, private screens or couple data.
 - `everglow-manga-home.png`: MangaCelestia homepage, same capture setup; cropped to the top 1336 × 490 to remove the guest label and lower listings/genre list, which included adult titles.
-- `everglow-books-home.png`: Books homepage, same capture setup (live Open Library/Gutenberg catalogue); cropped to 1440 × 742 to remove the overlapping bottom navigation.
 
-Only cinema, anime, books, manga and manhwa are introduced publicly. No private relationship screens or account details are included. The former `everglow.png` private sign-in image is removed from the current build; repository history has not been rewritten.
+Only cinema, anime, manga and manhwa are shown publicly. No private relationship screens or account details are included. The former `everglow.png` private sign-in image is removed from the current build; repository history has not been rewritten.
 
 ## Fonts
 
