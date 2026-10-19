@@ -83,7 +83,7 @@ A 1296px maximum container uses 48px side gutters on larger screens and 20px on 
 
 At 1100px, the rail and type compress. At 760px, the rail becomes horizontal and the app stories become single-column. At 360px, navigation gaps tighten. App stories pair generous images with purpose, feature lists and actions. Downloads retain readable rows rather than cards.
 
-The moving exhibition is a progressive enhancement for view-timeline-capable browsers, at least 900px wide and 700px tall, with no reduced-motion preference. Each figure sticks 48px from the top while its existing feature statements scroll in larger, spaced reading beats. The image is height-bounded to fit the viewport, including its caption. Mobile, short viewports, reduced motion and unsupported browsers retain the compact static layout.
+The moving exhibition is a progressive enhancement for view-timeline-capable browsers with no reduced-motion preference. Image arrival, line progress and feature emphasis work at every viewport width, including narrow embedded previews. Only the sticky two-column layout requires at least 900px width and 700px height: figures then stick 48px from the top while feature statements scroll in larger reading beats. Mobile and short viewports keep compact, unpinned flow but retain scroll animation. Reduced motion and unsupported browsers retain the static layout.
 
 ## Elevation & Depth
 No shadows, bevels, or faux-metal textures. Depth comes from restrained tonal fields and the original app imagery. Selected state uses brighter text, a line, an arrow on desktop, and semantic state.
@@ -97,7 +97,7 @@ Thin rules and mostly square plates. Primary download controls use the small con
 - **App rail:** progressively enhanced anchor links become keyboard-operable tabs with a single selected panel. Without JavaScript, links lead to the complete app introductions.
 - **Image plates:** contained, unfiltered artwork; full-image links and captions explain what is shown. Missing images receive a text fallback when JavaScript is available.
 - **Focus:** visible 2px outline with a 6px offset; the skip link appears on focus.
-- **Motion:** a 350ms brightness transition when selecting an app, disabled under reduced-motion preferences. The moving exhibition uses native CSS view timelines: a thin silver line tracks story progress, screenshot scale settles from 0.98 to 1 as it enters, and feature text/dividers brighten from the readable muted tone to silver. These effects scrub in both directions with scrolling. Text and border-color changes can repaint; no framerate is promised. There is no autoplay, carousel timer, scroll interception or forced slide sequence. The opening tabs and direct download links remain independent of scrolling.
+- **Motion:** a 350ms brightness transition when selecting an app, disabled under reduced-motion preferences. The moving exhibition uses native CSS view timelines: a thin silver line tracks story progress, screenshots rise 40px and scale from 0.92 to 1 into their image plates as they enter, and feature text/dividers brighten from the readable muted tone to silver. These effects scrub in both directions with scrolling. Text and border-color changes can repaint; no framerate is promised. There is no autoplay, carousel timer, scroll interception or forced slide sequence. The opening tabs and direct download links remain independent of scrolling.
 
 ## Do's and Don'ts
 - Do preserve app identities and real image proportions.

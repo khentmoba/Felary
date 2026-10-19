@@ -24,11 +24,11 @@ The production site is written to `dist/`. Serve that folder, not the repository
 
 ## Scroll-driven exhibition
 
-On supporting browsers and desktop viewports at least 900px wide and 700px tall, app screenshots stay in view while their introductions and features scroll past. A thin silver progress line, subtle image scaling, and readable feature emphasis follow the scroll position in both directions. No new JavaScript, runtime dependency, or paid service is added.
+On supporting browsers, app screenshots rise and scale into their plates while thin silver progress lines and readable feature emphasis follow scrolling in both directions. These effects work on narrow previews and phones too. On desktop viewports at least 900px wide and 700px tall, screenshots additionally stay in view while their introductions and features scroll past. No new JavaScript, runtime dependency, or paid service is added.
 
-The compact static layout remains on phones, short viewports, reduced-motion settings, and browsers without CSS view-timeline support. Content is never hidden awaiting animation. Supporting browsers retain the exhibition even when JavaScript is disabled. Header links still jump directly to app stories and downloads; the opening tabs remain user-controlled.
+Phones and short viewports keep a compact, unpinned layout with scroll animations. Reduced-motion settings and browsers without CSS view-timeline support keep the static layout. Content is never hidden awaiting animation. Supporting browsers retain the exhibition even when JavaScript is disabled. Header links still jump directly to app stories and downloads; the opening tabs remain user-controlled.
 
-Native-browser verification covered all three sticky figures, their release into the next story, reversible scroll progress, reduced-motion and mobile fallbacks, short viewports, the keyboard-operated spotlight, JavaScript disabled, and native Downloads anchor placement. Checks ran in local Chrome, not Safari/Firefox or physical mobile hardware. Motion styling is in `src/style.css`.
+Native-browser verification covered all three sticky figures, their release into the next story, reversible scroll progress, visible image transforms in the 539px embedded preview, mobile animations, reduced-motion fallbacks, short viewports, the keyboard-operated spotlight, JavaScript disabled, and native Downloads anchor placement. Checks ran in local Chrome, not Safari/Firefox or physical mobile hardware. Motion styling is in `src/style.css`.
 
 ## Deploy to Cloudflare Pages
 

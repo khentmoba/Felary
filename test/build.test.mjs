@@ -59,7 +59,8 @@ test('scroll motion is native, opt-in, and leaves the static fallback intact', a
   const css=await readFile('src/style.css','utf8');
   const motion=css.slice(css.indexOf('@supports (animation-timeline: view())'));
   assert.ok(motion.startsWith('@supports (animation-timeline: view())'));
-  assert.ok(motion.includes('(min-width: 900px) and (min-height: 700px) and (prefers-reduced-motion: no-preference)'));
+  assert.ok(motion.includes('@media (prefers-reduced-motion: no-preference)'), 'scroll animation must not be restricted to wide desktop viewports');
+  assert.ok(motion.includes('@media (min-width: 900px) and (min-height: 700px)'), 'only the sticky layout is desktop-specific');
   assert.ok(motion.includes('position: sticky;'));
   assert.ok(motion.includes('animation-timeline: --exhibition;'));
   assert.ok(motion.includes('animation-timeline: view();'));

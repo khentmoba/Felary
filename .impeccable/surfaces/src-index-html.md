@@ -19,10 +19,10 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 
 ## Moving exhibition — approved motion plan
 - Focal moment: within each desktop app story, the real screenshot remains on a native sticky plinth while the introduction, three feature statements, and actions scroll alongside it. The next application takes over in normal document flow.
-- Continuity: a thin silver line above the plate tracks the story's scroll progress; feature text and its existing divider brighten as they enter the reading area. The opening spotlight remains click/keyboard-driven.
+- Continuity: on every viewport width, screenshots rise 40px and scale from 0.92 to 1 into their plates, a thin silver line tracks story progress, and feature text/dividers brighten as they enter the reading area. The opening spotlight remains click/keyboard-driven.
 - Feedback: existing selected-tab state and download links remain unchanged. No wheel interception, scroll lock, timed sequences, or forced carousel.
 - Budget: CSS-only progressive enhancement, no dependencies or scroll listeners. Small image scale and line transforms; text/border color repaint is confined to the three statements. No blur or full-screen effects; no framerate guarantee.
-- Fallback: compact static stories on mobile, short viewports, reduced motion, and browsers without view-timeline support. The enhancement also works without JavaScript in supporting browsers. Preserve all content, image captions, anchor navigation and direct downloads.
+- Responsive behavior: mobile, short viewports and narrow preview panels keep compact unpinned stories, with image/line/feature animation still enabled. Only reduced motion and browsers without view-timeline support use the static fallback. The enhancement also works without JavaScript in supporting browsers. Preserve all content, image captions, anchor navigation and direct downloads.
 
 ## Content limitations
 SpeakFlow's published dark workspace screenshot is a UI preview from its repository, not a promise that it matches the pinned installer. Everglow imagery depicts its sign-in screen, not authenticated playback. Cinder now shows a capture of its actual frontend, replacing the icon at the owner's request. All usage figures are synthetic and explicitly labeled DEMO DATA in the image and caption; no personal session logs were used. No app interface was fabricated.

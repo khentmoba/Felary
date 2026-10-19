@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-19T15:14:40.895Z",
+  "generatedAt": "2026-10-19T15:20:17.908Z",
   "title": "Design System: Felary",
   "extensions": {
     "typographyMeta": {
@@ -27,7 +27,7 @@
       {
         "name": "moving-exhibition",
         "value": "Native sticky figure at 48px; named --exhibition view timeline and individual view() feature timelines.",
-        "purpose": "Keep the actual screenshot in view as the story scrolls; a transform-only progress line and 0.98-to-1 image arrival support readable color emphasis. Enabled only at 900px × 700px or larger, with timeline support and no reduced-motion preference. No autoplay or scroll listeners."
+        "purpose": "Image arrival (40px rise and scale 0.92 to 1), silver line progress and readable feature emphasis on every viewport width. Only sticky positioning and spaced feature rows need 900px × 700px or larger. Timeline support and no reduced-motion preference are required. No autoplay or scroll listeners."
       }
     ],
     "breakpoints": [
