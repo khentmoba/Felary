@@ -38,7 +38,9 @@ test('spotlight has three matched choices and one visible initial panel', () => 
     assert.ok(stories.includes('id="app-'+slug+'"'));
     for(const f of p.showcase.features) assert.ok(stories.includes(escapeHtml(f)));
   }
-  assert.ok(stories.includes('Official application artwork'));
+  assert.ok(stories.includes('Actual Cinder interface · demo data, not personal usage.'));
+  assert.equal(projects.find(p=>p.repo==='Cinder').showcase.artwork,undefined);
+  assert.ok(!panels.includes('spotlight-panel cobalt artwork'));
   assert.ok(panels.includes('fetchpriority="high"'));
 });
 

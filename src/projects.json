@@ -43,13 +43,12 @@
         "Inspect local data sources and check for updates"
       ],
       "image": "cinder.png",
-      "imageAlt": "Cinder's official blue bar-chart app icon.",
-      "imageCaption": "Official application artwork · interface screenshot to come.",
-      "imageWidth": 1024,
-      "imageHeight": 1024,
+      "imageAlt": "Cinder's actual dashboard showing coding-agent usage, token totals, a model breakdown, and daily charts with demo data.",
+      "imageCaption": "Actual Cinder interface · demo data, not personal usage.",
+      "imageWidth": 1280,
+      "imageHeight": 800,
       "short": "Coding-agent usage · Windows",
-      "tone": "cobalt",
-      "artwork": true
+      "tone": "cobalt"
     }
   },
   {

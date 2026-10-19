@@ -49,7 +49,7 @@ A project needs `name`, `repo` (repository name under khentmoba), `description`,
 
 Downloads deliberately link to explicit versions. When publishing a newer release, update its tag, version and asset filename together, then rebuild. The separate latest-release links always lead to GitHub's newest release. Site builds do not automatically import new repositories or releases, and require no GitHub API requests.
 
-Project descriptions and release filenames were checked against public GitHub metadata during setup. LUNA EXPRESS and SLSS have no supplied description; their entries use neutral source links rather than invented claims. SpeakFlow and Everglow use real repository images. Cinder uses official artwork, explicitly labeled rather than presented as an interface screenshot. Image sources, pinned commits, font origins and licenses are recorded in `src/assets/SOURCES.md`. No testimonials, employment history or contact details have been fabricated.
+Project descriptions and release filenames were checked against public GitHub metadata during setup. LUNA EXPRESS and SLSS have no supplied description; their entries use neutral source links rather than invented claims. SpeakFlow and Everglow use real repository images. Cinder shows its actual frontend with clearly labeled demo statistics, not private usage data. Image sources, pinned commits, font origins and licenses are recorded in `src/assets/SOURCES.md`. No testimonials, employment history or contact details have been fabricated.
 
 ## Checks
 

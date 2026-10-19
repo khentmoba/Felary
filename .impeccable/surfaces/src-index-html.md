@@ -18,4 +18,4 @@ FORM: Blackened exhibition plates, fourth of seven grounded candidates. seed:9a8
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
 
 ## Content limitations
-SpeakFlow's published dark workspace screenshot is a UI preview from its repository, not a promise that it matches the pinned installer. Everglow imagery depicts its sign-in screen, not authenticated playback. Cinder uses its official icon, explicitly captioned as artwork rather than a screenshot. No artificial usage numbers or app screens.
+SpeakFlow's published dark workspace screenshot is a UI preview from its repository, not a promise that it matches the pinned installer. Everglow imagery depicts its sign-in screen, not authenticated playback. Cinder now shows a capture of its actual frontend, replacing the icon at the owner's request. All usage figures are synthetic and explicitly labeled DEMO DATA in the image and caption; no personal session logs were used. No app interface was fabricated.
