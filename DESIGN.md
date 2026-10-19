@@ -1,17 +1,101 @@
-# Felary visual system
+---
+name: Felary
+description: A black exhibition for personal software.
+colors:
+  background: "#08090b"
+  foreground: "#edeee9"
+  muted: "#a9adb2"
+  line: "#303237"
+  accent: "#c8d1c1"
+  surface: "#111316"
+  forest: "#111916"
+  cobalt: "#0e1420"
+  plum: "#14101f"
+typography:
+  display:
+    fontFamily: "Barlow Condensed, sans-serif"
+    fontSize: "clamp(52px, 6.12vw, 88px)"
+    fontWeight: 600
+    lineHeight: 0.98
+    letterSpacing: "-0.025em"
+  headline:
+    fontFamily: "Barlow Condensed, sans-serif"
+    fontSize: "clamp(40px, 4.4vw, 64px)"
+    fontWeight: 600
+    lineHeight: 0.98
+    letterSpacing: "-0.025em"
+  body:
+    fontFamily: "Manrope, sans-serif"
+    fontSize: "14px"
+    fontWeight: 400
+    lineHeight: 1.9
+  label:
+    fontFamily: "Manrope, sans-serif"
+    fontSize: "12px"
+    fontWeight: 400
+rounded:
+  control: "4px"
+spacing:
+  compact: "12px"
+  control: "18px"
+  group: "24px"
+  section: "48px"
+components:
+  button-primary:
+    backgroundColor: "{colors.foreground}"
+    textColor: "{colors.background}"
+    rounded: "{rounded.control}"
+    padding: "13px 18px"
+  button-primary-hover:
+    backgroundColor: "{colors.accent}"
+    textColor: "{colors.background}"
+---
 
-## Approved direction
-Personal software index. An editorial, warm-paper page with a numbered project list and a contrasting dark downloads shelf. The owner approved this direction and a code-first build.
+# Design System: Felary
 
-## Material and type
-Paper #f3f0e7, ink #282c25, secondary text #626459, olive #50652d, rules #cdcdbf. The download shelf uses #262e23 with pale green text and actions.
-DM Sans provides body, navigation, and project typography. Libre Caslon Display provides display emphasis; both have fallback stacks. Typography is fluid, never larger than 96px.
+## Overview
+**Creative North Star: "The midnight exhibition"**
 
-## Composition
-1120px maximum content width, generous section spacing, thin row separators. Project rows are the primary navigation into the work, not decorative cards. Numbers identify positions in the index. Downloads expose the exact version and Windows architecture next to an explicit installer action.
+The owner chose a black-and-silver replacement for the warm-paper portfolio. The software leads: restrained chrome, large condensed lettering, and real application imagery with room to breathe.
 
-## Behavior
-Native anchor navigation, visible keyboard focus, a skip link, reduced-motion support. Project arrows translate slightly on hover. At 700px and below, metadata stacks beneath project descriptions; downloads and About become single-column. No animation hides content. No browser JavaScript is needed.
+**Key Characteristics:**
+- A continuous black ground with silver text.
+- One focal application rather than equal promotional tiles.
+- Real screenshots and clearly identified app artwork.
 
-## Content discipline
-Use real repository and release metadata. Never invent product screenshots or biography claims. Explicit installer versions are maintained in src/projects.json. Visual detector warnings about cream and serif treatment are intentional within the owner-approved editorial direction; the full-width shelf has an inset .wrap, not flush text.
+## Colors
+The frontmatter records the implemented palette. Background and foreground establish the exhibition; muted ink carries secondary information; thin line ink separates content. Accent is a pale hover and selection tone, not a glow. Forest, cobalt and plum identify app plates without recoloring their images.
+
+**The Unfiltered Work Rule.** Preserve the original colors and proportions of application images.
+
+## Typography
+Self-hosted Barlow Condensed provides uppercase display and section headings. Self-hosted Manrope provides personal copy, application names, captions and controls. No external font requests are required; licenses ship beside the fonts.
+
+Display peaks at 88px; application story headings use 40px, reduced to 36px on mobile. Supporting copy is generally 14–15px with generous line height, and metadata is at least 12px. Body copy remains within 65 characters where practical.
+
+## Layout
+A 1296px maximum container uses 48px side gutters on larger screens and 20px on phones. The homepage opens with a personal introduction and a single app plate, supported by a 252px title rail.
+
+At 1100px, the rail and type compress. At 760px, the rail becomes horizontal and the app stories become single-column. At 360px, navigation gaps tighten. App stories pair generous images with purpose, feature lists and actions. Downloads retain readable rows rather than cards.
+
+## Elevation & Depth
+No shadows, bevels, or faux-metal textures. Depth comes from restrained tonal fields and the original app imagery. Selected state uses brighter text, a line, an arrow on desktop, and semantic state.
+
+## Shapes
+Thin rules and mostly square plates. Primary download controls use the small control radius. Icons are consistent small stroked SVGs.
+
+## Components
+- **Primary actions:** silver field with dark text, 46px minimum height, pale accent on hover.
+- **Text links:** offset underlines and a small arrow; no color-only distinction from body text.
+- **App rail:** progressively enhanced anchor links become keyboard-operable tabs with a single selected panel. Without JavaScript, links lead to the complete app introductions.
+- **Image plates:** contained, unfiltered artwork; full-image links and captions explain what is shown. Missing images receive a text fallback when JavaScript is available.
+- **Focus:** visible 2px outline with a 6px offset; the skip link appears on focus.
+- **Motion:** a 350ms brightness transition when selecting an app, disabled under reduced-motion preferences. There is no autoplay or carousel timer.
+
+## Do's and Don'ts
+- Do preserve app identities and real image proportions.
+- Do label official artwork separately from interface screenshots.
+- Do keep all introductory content and downloads accessible without JavaScript.
+- Don't invent product screens, usage data, biography details, or feature claims.
+- Don't revive the superseded cream-and-serif identity for new sections.
+- Don't turn the exhibition into glowing panels or a decorative dashboard.

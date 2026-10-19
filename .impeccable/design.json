@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-19T14:49:25.027Z",
+  "title": "Design System: Felary",
+  "extensions": {
+    "typographyMeta": {
+      "display": {
+        "displayName": "Exhibition display",
+        "purpose": "Uppercase introduction and section headings."
+      },
+      "body": {
+        "displayName": "Reading copy",
+        "purpose": "Personal introduction and application stories."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "plate-on",
+        "value": "brightness(.7) to brightness(1), 350ms cubic-bezier(.16,1,.3,1)",
+        "purpose": "Selected app plate, only without reduced-motion preference."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "compact-desktop",
+        "value": "1100px"
+      },
+      {
+        "name": "mobile",
+        "value": "760px"
+      },
+      {
+        "name": "narrow",
+        "value": "360px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary download",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Download a Windows app.",
+      "html": "<a class=\"ds-button\" href=\"#download\">Download for Windows <svg aria-hidden=\"true\" viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\"><path d=\"M5 19 19 5M5 5h14v14\"/></svg></a>",
+      "css": ".ds-button{display:inline-flex;gap:20px;align-items:center;background:#edeee9;color:#08090b;border:1px solid #b8bcb6;border-radius:4px;padding:13px 18px;font:600 12px Manrope,sans-serif;text-decoration:none;min-height:46px}.ds-button:hover{background:#c8d1c1}.ds-button:focus-visible{outline:2px solid #edeee9;outline-offset:6px}"
+    },
+    {
+      "name": "Source link",
+      "kind": "button",
+      "description": "A secondary action to source or release notes.",
+      "html": "<a class=\"ds-link\" href=\"#source\">Explore the source <svg aria-hidden=\"true\" viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\"><path d=\"M5 19 19 5M5 5h14v14\"/></svg></a>",
+      "css": ".ds-link{display:inline-flex;gap:12px;align-items:center;color:#edeee9;font:12px Manrope,sans-serif;text-underline-offset:6px}.ds-link:hover{color:#c8d1c1}.ds-link:focus-visible{outline:2px solid #edeee9;outline-offset:6px}"
+    },
+    {
+      "name": "Main navigation",
+      "kind": "nav",
+      "description": "Quiet navigation on the black ground.",
+      "html": "<nav class=\"ds-nav\"><a href=\"#work\">Applications</a><a href=\"#downloads\">Downloads</a><a href=\"#about\">About</a></nav>",
+      "css": ".ds-nav{display:flex;gap:32px;background:#08090b;padding:20px}.ds-nav a{color:#edeee9;font:13px Manrope,sans-serif;text-decoration:none}.ds-nav a:hover{color:#c8d1c1}.ds-nav a:focus-visible{outline:2px solid #edeee9;outline-offset:6px}"
+    },
+    {
+      "name": "App choice",
+      "kind": "custom",
+      "description": "An app title with visible selected state.",
+      "html": "<a class=\"ds-choice\" href=\"#app\" aria-current=\"true\"><strong>SpeakFlow</strong><small>Voice to text · Windows</small><svg aria-hidden=\"true\" viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\"><path d=\"M5 19 19 5M5 5h14v14\"/></svg></a>",
+      "css": ".ds-choice{display:block;position:relative;background:#08090b;color:#edeee9;border-bottom:1px solid #edeee9;padding:22px 28px 22px 0;text-decoration:none;max-width:228px;font-family:Manrope,sans-serif}.ds-choice strong{font-size:24px;font-weight:400}.ds-choice small{display:block;color:#a9adb2;font-size:12px;margin-top:8px}.ds-choice svg{position:absolute;right:2px;top:28px}.ds-choice:hover{color:#c8d1c1}.ds-choice:focus-visible{outline:2px solid #edeee9;outline-offset:6px}"
+    },
+    {
+      "name": "Image caption",
+      "kind": "custom",
+      "description": "Truthful context and original-image access.",
+      "html": "<p class=\"ds-caption\">Official application artwork · interface screenshot to come. <a href=\"#image\">View full image</a></p>",
+      "css": ".ds-caption{color:#a9adb2;font:12px/1.7 Manrope,sans-serif}.ds-caption a{color:inherit;text-underline-offset:6px}.ds-caption a:hover{color:#c8d1c1}.ds-caption a:focus-visible{outline:2px solid #edeee9;outline-offset:6px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The midnight exhibition",
+    "overview": "The owner chose a black-and-silver replacement for the warm-paper portfolio. The software leads: restrained chrome, large condensed lettering, and real application imagery with room to breathe.",
+    "keyCharacteristics": [
+      "A continuous black ground with silver text.",
+      "One focal application rather than equal promotional tiles.",
+      "Real screenshots and clearly identified app artwork."
+    ],
+    "rules": [
+      {
+        "name": "The Unfiltered Work Rule",
+        "body": "Preserve the original colors and proportions of application images.",
+        "section": "colors"
+      }
+    ],
+    "dos": [
+      "Do preserve app identities and real image proportions.",
+      "Do label official artwork separately from interface screenshots.",
+      "Do keep all introductory content and downloads accessible without JavaScript."
+    ],
+    "donts": [
+      "Don't invent product screens, usage data, biography details, or feature claims.",
+      "Don't revive the superseded cream-and-serif identity for new sections.",
+      "Don't turn the exhibition into glowing panels or a decorative dashboard."
+    ]
+  }
+}

@@ -7,7 +7,23 @@
     "language": "Rust",
     "version": "1.1.3",
     "installer": "SpeakFlow_1.1.3_x64-setup.exe",
-    "tag": "1.1.3"
+    "tag": "1.1.3",
+    "showcase": {
+      "headline": "Speak naturally. Keep your flow.",
+      "intro": "Hold a hotkey, speak, then release. SpeakFlow turns your words into text in the app you're already using, with local and cloud recognition options.",
+      "features": [
+        "Dictate into your active app",
+        "Choose local or cloud speech recognition",
+        "Optional AI rewriting and translation"
+      ],
+      "image": "speakflow.png",
+      "imageAlt": "SpeakFlow's dark dictation workspace with recording controls and a transcript panel.",
+      "imageCaption": "Published workspace preview · may differ from the downloadable version.",
+      "imageWidth": 920,
+      "imageHeight": 740,
+      "short": "Voice to text · Windows",
+      "tone": "forest"
+    }
   },
   {
     "name": "Cinder",
@@ -17,7 +33,24 @@
     "language": "Rust",
     "version": "0.2.0",
     "installer": "Cinder_0.2.0_x64-setup.exe",
-    "tag": "v0.2.0"
+    "tag": "v0.2.0",
+    "showcase": {
+      "headline": "See where your agent usage goes.",
+      "intro": "Cinder brings your coding-agent activity into one desktop view. Explore requests, tokens, and available cost estimates from local logs instead of piecing them together across tools.",
+      "features": [
+        "Read coding-agent logs on your machine",
+        "Explore usage across date ranges",
+        "Inspect local data sources and check for updates"
+      ],
+      "image": "cinder.png",
+      "imageAlt": "Cinder's official blue bar-chart app icon.",
+      "imageCaption": "Official application artwork · interface screenshot to come.",
+      "imageWidth": 1024,
+      "imageHeight": 1024,
+      "short": "Coding-agent usage · Windows",
+      "tone": "cobalt",
+      "artwork": true
+    }
   },
   {
     "name": "Everglow Desktop",
@@ -27,7 +60,23 @@
     "language": "Tauri",
     "version": "0.3.2",
     "installer": "Everglow-Desktop-Setup.exe",
-    "tag": "v0.3.2"
+    "tag": "v0.3.2",
+    "showcase": {
+      "headline": "A dedicated home for Everglow.",
+      "intro": "The Everglow website, in its own Windows application. Keep a separate sign-in profile and use desktop controls without keeping another browser tab open.",
+      "features": [
+        "A persistent, independent browser profile",
+        "Fullscreen and refresh controls",
+        "Desktop update checks built into the app"
+      ],
+      "image": "everglow.png",
+      "imageAlt": "Everglow's purple sign-in screen with a numeric keypad.",
+      "imageCaption": "Actual sign-in screen · shown before authentication.",
+      "imageWidth": 1280,
+      "imageHeight": 830,
+      "short": "Your own window · Windows",
+      "tone": "plum"
+    }
   },
   {
     "name": "LUNA EXPRESS",

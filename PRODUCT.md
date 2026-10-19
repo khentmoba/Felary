@@ -15,10 +15,10 @@ Khent's personal website: portfolio, public GitHub projects, and links to app do
 Visitors exploring the owner's work and looking for app downloads.
 
 ## Capabilities and Constraints
-Use verified public GitHub repositories and real release links. Editable content; code-first build approved. Hosting account setup and domain are undecided.
+Use verified public GitHub repositories and real release links. Editable content; code-first build approved. Include a personal introduction, selectable featured applications, and illustrated app introductions explaining purpose and features. Keep all core content and downloads available without JavaScript. Hosting account setup and domain are undecided.
 
 ## Brand Commitments
-Felary. GitHub account: khentmoba. Public GitHub name: Khent Felary G Sanco.
+Felary. GitHub account: khentmoba. Public GitHub name: Khent Felary G Sanco. The owner approved replacing the initial warm-paper index with the black-and-silver “midnight exhibition” direction.
 
 ## Evidence on Hand
-GitHub public API and release metadata. No supplied portrait, project screenshots, biography, contact address, employment history, or testimonials; do not invent them.
+GitHub public API, READMEs and release metadata. Real SpeakFlow workspace and Everglow sign-in images plus Cinder's official artwork, sourced from their public repositories; provenance is in src/assets/SOURCES.md and embedded PNG metadata. Cinder has no supplied interface screenshot and must not be depicted with an invented screen. No supplied portrait, detailed biography, contact address, employment history, or testimonials; do not invent them.
