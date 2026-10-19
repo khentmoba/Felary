@@ -45,7 +45,8 @@ export function initShowcase(root) {
   root.dataset.enhanced = '';
 }
 
-export function featureFrameIndex(featureTops, readingLine) {
+export function featureFrameIndex(featureTops, readingLine, ready=true) {
+  if (!ready) return 0;
   let frame=0;
   featureTops.forEach((top,i)=>{ if (top <= readingLine) frame=i+1; });
   return frame;
@@ -55,6 +56,9 @@ export function initFeatureStory(root) {
   const frames=[...root.querySelectorAll('[data-frame]')];
   const features=[...root.querySelectorAll('[data-feature-step]')];
   if (frames.length < 2 || typeof IntersectionObserver === 'undefined') return;
+  const body=root.querySelector('.story-body');
+  const figure=root.querySelector('.story-figure');
+  const intro=root.querySelector('.story-copy>p');
   const caption=root.querySelector('[data-gallery-caption]');
   const link=root.querySelector('[data-gallery-link]');
   const layout=matchMedia('(min-width: 900px) and (min-height: 700px) and (prefers-reduced-motion: no-preference)');
@@ -79,8 +83,12 @@ export function initFeatureStory(root) {
     shown=frame;
   };
   const update=()=>{
+    const line=parseFloat(getComputedStyle(figure).top)||0;
+    const ready=body.getBoundingClientRect().top<=line+1
+      && figure.getBoundingClientRect().top<=line+1
+      && intro.getBoundingClientRect().bottom<=line;
     desired=root.dataset.sceneScroll==='true'
-      ? featureFrameIndex(features.map(el=>el.getBoundingClientRect().top),innerHeight*.45)
+      ? featureFrameIndex(features.map(el=>el.getBoundingClientRect().top),line,ready)
       : 0;
     paint(desired);
   };
@@ -89,15 +97,25 @@ export function initFeatureStory(root) {
     image?.addEventListener('load',update);
     image?.addEventListener('error',update);
   });
+  // The last feature must reach the top while the picture is still pinned.
+  const sizeTail=enabled=>{
+    body.style.paddingBottom='';
+    if (!enabled) return;
+    const below=body.getBoundingClientRect().bottom-features[features.length-1].getBoundingClientRect().top;
+    const extra=Math.ceil(figure.offsetHeight-below+8);
+    if (extra>0) body.style.paddingBottom=extra+'px';
+  };
   const configure=()=>{
     observer?.disconnect();
     const enabled=layout.matches && CSS.supports('animation-timeline: view()');
     root.dataset.sceneScroll=String(enabled);
+    sizeTail(enabled);
     if (enabled) {
-      const top=Math.round(innerHeight*.45);
+      const top=Math.round(parseFloat(getComputedStyle(figure).top)||0);
       const bottom=innerHeight-top-1;
       observer=new IntersectionObserver(update,{rootMargin:`-${top}px 0px -${bottom}px 0px`,threshold:0});
       features.forEach(feature=>observer.observe(feature));
+      observer.observe(intro);
     }
     update();
   };

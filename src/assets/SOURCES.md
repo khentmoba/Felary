@@ -26,13 +26,13 @@ Feature captures are 1400 × 900 and include a visible DEMO DATA label. The nati
 
 ## Everglow — public media only
 
-Source repository HEAD when inspected: `4b63440c0a50effb69ccf97cffee58697ac143fa`. Existing proof captures were reused; source application files were not changed.
+Source repository HEAD when inspected: `4b63440c0a50effb69ccf97cffee58697ac143fa`. Homepages were captured fresh from a local run; source application files were not changed.
 
-- `everglow-cinema.png`: `C:/APPLICATIONS/Everglow/docs/pr-proof/pr-461/cinema-1-spoilers-hidden-430.png`. Actual cinema episode controls with demo content; cropped to the top 860 × 740 pixels to remove unused background.
-- `everglow-anime.png`: `C:/APPLICATIONS/Everglow/docs/pr-proof/anime-hero-sizing/desktop-banner.png` (1280 × 720). Original production anime spotlight widget with labeled demo artwork/title. Its README documents the synthetic scene and no account/couple data.
-- `everglow-reading.png`: `C:/APPLICATIONS/Everglow/docs/pr-proof/pr-390/shot-mangacelestia.png` (900 × 445). Actual public guest catalog, showing manga/manhwa/manhua filters. This image is not the separate books interface.
+- `everglow-anime-home.png`: Everglow anime homepage rendered locally from Everglow HEAD `4b63440` in agent mode (cinema-guest profile), live public catalogue, captured 2026-10-20 at 1440 × 900; cropped to 1310 × 900 to remove the guest account label. No credentials, private screens or couple data.
+- `everglow-manga-home.png`: MangaCelestia homepage, same capture setup; cropped to the top 1336 × 490 to remove the guest label and lower listings/genre list, which included adult titles.
+- `everglow-books-home.png`: Books homepage, same capture setup (live Open Library/Gutenberg catalogue); cropped to 1440 × 742 to remove the overlapping bottom navigation.
 
-Only cinema, anime, books, manga and manhwa are introduced publicly. No private relationship screens or account details are included. The former `everglow.png` private sign-in image is removed from the current build; repository history has not been rewritten. A fresh local agent-mode web capture did not complete, so it was not used or presented as evidence.
+Only cinema, anime, books, manga and manhwa are introduced publicly. No private relationship screens or account details are included. The former `everglow.png` private sign-in image is removed from the current build; repository history has not been rewritten.
 
 ## Fonts
 

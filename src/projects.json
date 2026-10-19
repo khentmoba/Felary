@@ -108,40 +108,40 @@
     "tag": "v0.3.2",
     "showcase": {
       "headline": "Something to watch. Something to read.",
-      "intro": "Explore Everglow's cinema, anime, books, and manga/manhwa sections. From finding a movie or a series to choosing your next read, this is the media side of Everglow.",
+      "intro": "Everglow brings cinema, anime, books, and manga/manhwa together. Find something to watch tonight, catch up on what's airing, or pick your next read.",
       "features": [
-        "Cinema — movies and series",
-        "Anime — shows and episodes",
-        "Books, manga and manhwa — your next read"
+        "Anime — what's airing and trending",
+        "MangaCelestia — manga, manhwa and manhua",
+        "Books — classics and new finds"
       ],
-      "image": "everglow-anime.png",
-      "imageAlt": "Everglow's anime spotlight showing a clearly labeled demo title and artwork.",
-      "imageCaption": "Public-facing anime interface · demo artwork and title; no private account content.",
-      "imageWidth": 1280,
-      "imageHeight": 720,
+      "image": "everglow-anime-home.png",
+      "imageAlt": "Everglow's anime homepage with a trending show in the hero, its rating, genres and Watch Now controls.",
+      "imageCaption": "Anime homepage · live public catalogue at capture time.",
+      "imageWidth": 1310,
+      "imageHeight": 900,
       "short": "Cinema, anime & reading",
       "tone": "plum",
       "scenes": [
         {
-          "image": "everglow-cinema.png",
-          "imageAlt": "Everglow's cinema episode list with spoiler controls and episode selection.",
-          "imageCaption": "Cinema episode controls · actual widget with demo content; cropped to the relevant interface.",
-          "imageWidth": 860,
-          "imageHeight": 740
+          "image": "everglow-anime-home.png",
+          "imageAlt": "Everglow's anime homepage with a trending show in the hero, its rating, genres and Watch Now controls.",
+          "imageCaption": "Anime homepage · live public catalogue at capture time.",
+          "imageWidth": 1310,
+          "imageHeight": 900
         },
         {
-          "image": "everglow-anime.png",
-          "imageAlt": "Everglow's anime spotlight with a featured show, year, genre and viewing controls.",
-          "imageCaption": "Anime spotlight · actual production widget with clearly labeled demo artwork and title.",
-          "imageWidth": 1280,
-          "imageHeight": 720
+          "image": "everglow-manga-home.png",
+          "imageAlt": "MangaCelestia's homepage with manga, manhwa and manhua filters and a Hot Updates row of covers.",
+          "imageCaption": "MangaCelestia homepage · live public catalogue, cropped to the top of the page.",
+          "imageWidth": 1336,
+          "imageHeight": 490
         },
         {
-          "image": "everglow-reading.png",
-          "imageAlt": "Everglow's MangaCelestia guest catalog with manga, manhwa and manhua filters.",
-          "imageCaption": "MangaCelestia · guest catalog preview. Books have a separate section; they are not pictured here.",
-          "imageWidth": 900,
-          "imageHeight": 445
+          "image": "everglow-books-home.png",
+          "imageAlt": "Everglow's Books homepage with search, reading categories and a Most Popular shelf of classics.",
+          "imageCaption": "Books homepage · live public catalogue at capture time.",
+          "imageWidth": 1440,
+          "imageHeight": 742
         }
       ]
     }

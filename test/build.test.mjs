@@ -71,6 +71,16 @@ test('feature scenes match every statement and use safe, complete image metadata
   }
 });
 
+test('feature frames wait for the pinned, introduction-cleared reading phase', () => {
+  assert.equal(featureFrameIndex([-20,196,412],48,false),0);
+  assert.equal(featureFrameIndex([75,291,507],48,true),0);
+  assert.equal(featureFrameIndex([48,264,480],48,true),1);
+  assert.equal(featureFrameIndex([-168,48,264],48,true),2);
+  assert.equal(featureFrameIndex([-384,-168,48],48,true),3);
+  assert.equal(featureFrameIndex([-100,116,332],48,true),1);
+  assert.equal(featureFrameIndex([-20,196,412],48,false),0);
+});
+
 test('scroll position selects the matching frame and restores it in reverse', () => {
   assert.equal(featureFrameIndex([600,800,1000],450),0);
   assert.equal(featureFrameIndex([400,600,800],450),1);
