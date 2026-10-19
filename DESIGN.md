@@ -33,6 +33,11 @@ typography:
     fontFamily: "Manrope, sans-serif"
     fontSize: "12px"
     fontWeight: 400
+  feature:
+    fontFamily: "Manrope, sans-serif"
+    fontSize: "clamp(18px, 1.6vw, 23px)"
+    fontWeight: 400
+    lineHeight: 1.6
 rounded:
   control: "4px"
 spacing:
@@ -78,6 +83,8 @@ A 1296px maximum container uses 48px side gutters on larger screens and 20px on 
 
 At 1100px, the rail and type compress. At 760px, the rail becomes horizontal and the app stories become single-column. At 360px, navigation gaps tighten. App stories pair generous images with purpose, feature lists and actions. Downloads retain readable rows rather than cards.
 
+The moving exhibition is a progressive enhancement for view-timeline-capable browsers, at least 900px wide and 700px tall, with no reduced-motion preference. Each figure sticks 48px from the top while its existing feature statements scroll in larger, spaced reading beats. The image is height-bounded to fit the viewport, including its caption. Mobile, short viewports, reduced motion and unsupported browsers retain the compact static layout.
+
 ## Elevation & Depth
 No shadows, bevels, or faux-metal textures. Depth comes from restrained tonal fields and the original app imagery. Selected state uses brighter text, a line, an arrow on desktop, and semantic state.
 
@@ -90,7 +97,7 @@ Thin rules and mostly square plates. Primary download controls use the small con
 - **App rail:** progressively enhanced anchor links become keyboard-operable tabs with a single selected panel. Without JavaScript, links lead to the complete app introductions.
 - **Image plates:** contained, unfiltered artwork; full-image links and captions explain what is shown. Missing images receive a text fallback when JavaScript is available.
 - **Focus:** visible 2px outline with a 6px offset; the skip link appears on focus.
-- **Motion:** a 350ms brightness transition when selecting an app, disabled under reduced-motion preferences. There is no autoplay or carousel timer.
+- **Motion:** a 350ms brightness transition when selecting an app, disabled under reduced-motion preferences. The moving exhibition uses native CSS view timelines: a thin silver line tracks story progress, screenshot scale settles from 0.98 to 1 as it enters, and feature text/dividers brighten from the readable muted tone to silver. These effects scrub in both directions with scrolling. Text and border-color changes can repaint; no framerate is promised. There is no autoplay, carousel timer, scroll interception or forced slide sequence. The opening tabs and direct download links remain independent of scrolling.
 
 ## Do's and Don'ts
 - Do preserve app identities and real image proportions.

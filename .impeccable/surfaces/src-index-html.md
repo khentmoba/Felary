@@ -17,5 +17,12 @@ FIRST VIEWPORT: 94px header; left-aligned two-line condensed introduction and sh
 FORM: Blackened exhibition plates, fourth of seven grounded candidates. seed:9a8cf9b65eb355fc. Approved sketch: .impeccable/mocks/decision/exhibition.html. No image comp was generated or approved. Signature interaction: application selection swaps the illuminated plate and caption; keyboard and no-JavaScript access are mandatory. Keep a complete focal image, app identities, personal voice, and clear selected state.
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
 
+## Moving exhibition — approved motion plan
+- Focal moment: within each desktop app story, the real screenshot remains on a native sticky plinth while the introduction, three feature statements, and actions scroll alongside it. The next application takes over in normal document flow.
+- Continuity: a thin silver line above the plate tracks the story's scroll progress; feature text and its existing divider brighten as they enter the reading area. The opening spotlight remains click/keyboard-driven.
+- Feedback: existing selected-tab state and download links remain unchanged. No wheel interception, scroll lock, timed sequences, or forced carousel.
+- Budget: CSS-only progressive enhancement, no dependencies or scroll listeners. Small image scale and line transforms; text/border color repaint is confined to the three statements. No blur or full-screen effects; no framerate guarantee.
+- Fallback: compact static stories on mobile, short viewports, reduced motion, and browsers without view-timeline support. The enhancement also works without JavaScript in supporting browsers. Preserve all content, image captions, anchor navigation and direct downloads.
+
 ## Content limitations
 SpeakFlow's published dark workspace screenshot is a UI preview from its repository, not a promise that it matches the pinned installer. Everglow imagery depicts its sign-in screen, not authenticated playback. Cinder now shows a capture of its actual frontend, replacing the icon at the owner's request. All usage figures are synthetic and explicitly labeled DEMO DATA in the image and caption; no personal session logs were used. No app interface was fabricated.

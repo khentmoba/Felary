@@ -55,6 +55,20 @@ test('spotlight keyboard selection wraps and supports first and last', () => {
   assert.equal(nextTabIndex(1,' ',3),1);
 });
 
+test('scroll motion is native, opt-in, and leaves the static fallback intact', async () => {
+  const css=await readFile('src/style.css','utf8');
+  const motion=css.slice(css.indexOf('@supports (animation-timeline: view())'));
+  assert.ok(motion.startsWith('@supports (animation-timeline: view())'));
+  assert.ok(motion.includes('(min-width: 900px) and (min-height: 700px) and (prefers-reduced-motion: no-preference)'));
+  assert.ok(motion.includes('position: sticky;'));
+  assert.ok(motion.includes('animation-timeline: --exhibition;'));
+  assert.ok(motion.includes('animation-timeline: view();'));
+  assert.ok(!motion.includes('opacity: 0'));
+  assert.ok(!motion.includes('display: none'));
+  const js=await readFile('src/showcase.js','utf8');
+  assert.ok(!/addEventListener\(['"](?:scroll|wheel|touchmove)['"]/.test(js));
+});
+
 test('production includes complete stories, local assets, unique IDs and valid anchors', async () => {
   await build();
   const html=await readFile('dist/index.html','utf8');

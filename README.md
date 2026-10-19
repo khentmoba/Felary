@@ -22,6 +22,14 @@ npm run build
 
 The production site is written to `dist/`. Serve that folder, not the repository root. No server, database, or API key is needed in production. A small local JavaScript module enhances the app spotlight with keyboard-accessible tabs. Without JavaScript, the introduction, app stories, pictures, source links and downloads remain available through native anchor links.
 
+## Scroll-driven exhibition
+
+On supporting browsers and desktop viewports at least 900px wide and 700px tall, app screenshots stay in view while their introductions and features scroll past. A thin silver progress line, subtle image scaling, and readable feature emphasis follow the scroll position in both directions. No new JavaScript, runtime dependency, or paid service is added.
+
+The compact static layout remains on phones, short viewports, reduced-motion settings, and browsers without CSS view-timeline support. Content is never hidden awaiting animation. Supporting browsers retain the exhibition even when JavaScript is disabled. Header links still jump directly to app stories and downloads; the opening tabs remain user-controlled.
+
+Native-browser verification covered all three sticky figures, their release into the next story, reversible scroll progress, reduced-motion and mobile fallbacks, short viewports, the keyboard-operated spotlight, JavaScript disabled, and native Downloads anchor placement. Checks ran in local Chrome, not Safari/Firefox or physical mobile hardware. Motion styling is in `src/style.css`.
+
 ## Deploy to Cloudflare Pages
 
 1. In Cloudflare, create a **Pages** project and connect the GitHub repository **khentmoba/Felary**.
@@ -53,7 +61,7 @@ Project descriptions and release filenames were checked against public GitHub me
 
 ## Checks
 
-GitHub Actions runs tests and a production build on pushes and pull requests. Five tests cover content validation, escaped text, installer URLs, matched spotlight choices/panels, keyboard-selection logic, unique anchors, image dimensions, local font files, security headers and production output. Browser checks covered 320px, 390px, 1280px and 1440px without horizontal overflow. App selection and arrow-key focus were checked in the browser. Visual inspection was performed in-thread, not by an independent design reviewer; captured views cover the opening and the SpeakFlow introduction rather than a full-page cross-browser audit.
+GitHub Actions runs tests and a production build on pushes and pull requests. Six tests cover content validation, escaped text, installer URLs, matched spotlight choices/panels, keyboard-selection logic, motion enhancement guards, unique anchors, image dimensions, local font files, security headers and production output. Browser checks covered 320px, 390px, 1280px and 1440px without horizontal overflow. App selection and arrow-key focus were checked in the browser. Visual inspection was performed in-thread, not by an independent design reviewer; captured views cover the opening and the SpeakFlow introduction rather than a full-page cross-browser audit.
 
 Fonts and images are served locally, with no runtime CDN or GitHub API dependency. Font licenses are included. No analytics, tracking scripts, forms or CMS are included.
 

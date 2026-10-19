@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-19T14:49:25.027Z",
+  "generatedAt": "2026-10-19T15:14:40.895Z",
   "title": "Design System: Felary",
   "extensions": {
     "typographyMeta": {
@@ -11,6 +11,10 @@
       "body": {
         "displayName": "Reading copy",
         "purpose": "Personal introduction and application stories."
+      },
+      "feature": {
+        "displayName": "Exhibition feature",
+        "purpose": "Larger reading beats only in the enhanced desktop app stories."
       }
     },
     "shadows": [],
@@ -19,6 +23,11 @@
         "name": "plate-on",
         "value": "brightness(.7) to brightness(1), 350ms cubic-bezier(.16,1,.3,1)",
         "purpose": "Selected app plate, only without reduced-motion preference."
+      },
+      {
+        "name": "moving-exhibition",
+        "value": "Native sticky figure at 48px; named --exhibition view timeline and individual view() feature timelines.",
+        "purpose": "Keep the actual screenshot in view as the story scrolls; a transform-only progress line and 0.98-to-1 image arrival support readable color emphasis. Enabled only at 900px × 700px or larger, with timeline support and no reduced-motion preference. No autoplay or scroll listeners."
       }
     ],
     "breakpoints": [
@@ -33,6 +42,10 @@
       {
         "name": "narrow",
         "value": "360px"
+      },
+      {
+        "name": "exhibition",
+        "value": "(min-width: 900px) and (min-height: 700px)"
       }
     ]
   },
