@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-19T15:20:17.908Z",
+  "generatedAt": "2026-10-19T15:55:42.694Z",
   "title": "Design System: Felary",
   "extensions": {
     "typographyMeta": {
@@ -28,6 +28,11 @@
         "name": "moving-exhibition",
         "value": "Native sticky figure at 48px; named --exhibition view timeline and individual view() feature timelines.",
         "purpose": "Image arrival (40px rise and scale 0.92 to 1), silver line progress and readable feature emphasis on every viewport width. Only sticky positioning and spaced feature rows need 900px × 700px or larger. Timeline support and no reduced-motion preference are required. No autoplay or scroll listeners."
+      },
+      {
+        "name": "feature-scene-crossfade",
+        "value": "240ms cubic-bezier(.16,1,.3,1), opacity only",
+        "purpose": "A feature crossing the 45% viewport reading line selects a matching real UI image in the sticky gallery. IntersectionObserver, not a scroll timer. Compact/reduced-motion/no-JS layouts expose all feature images inline."
       }
     ],
     "breakpoints": [

@@ -22,7 +22,30 @@
       "imageWidth": 920,
       "imageHeight": 740,
       "short": "Voice to text · Windows",
-      "tone": "forest"
+      "tone": "forest",
+      "scenes": [
+        {
+          "image": "speakflow-dictation.png",
+          "imageAlt": "SpeakFlow showing its active Listening state, recording waveform and dictation model.",
+          "imageCaption": "Dictation in progress · actual interface with simulated recording; no microphone or private audio used.",
+          "imageWidth": 1400,
+          "imageHeight": 900
+        },
+        {
+          "image": "speakflow-engines.png",
+          "imageAlt": "SpeakFlow with the cloud GLM-ASR engine selected in the Dictation model control.",
+          "imageCaption": "Cloud recognition selected · actual model selector with a demo backend; no cloud request made.",
+          "imageWidth": 1400,
+          "imageHeight": 900
+        },
+        {
+          "image": "speakflow-polish.png",
+          "imageAlt": "SpeakFlow displaying rewritten text and the original draft for comparison.",
+          "imageCaption": "Rewriting example · original and polished demo text in the actual interface.",
+          "imageWidth": 1400,
+          "imageHeight": 900
+        }
+      ]
     }
   },
   {
@@ -40,7 +63,7 @@
       "features": [
         "Read coding-agent logs on your machine",
         "Explore usage across date ranges",
-        "Inspect local data sources and check for updates"
+        "Check for app updates"
       ],
       "image": "cinder.png",
       "imageAlt": "Cinder's actual dashboard showing coding-agent usage, token totals, a model breakdown, and daily charts with demo data.",
@@ -48,33 +71,79 @@
       "imageWidth": 1280,
       "imageHeight": 800,
       "short": "Coding-agent usage · Windows",
-      "tone": "cobalt"
+      "tone": "cobalt",
+      "scenes": [
+        {
+          "image": "cinder-agents.png",
+          "imageAlt": "Cinder filtering its dashboard to the Pi coding agent, with requests and token totals.",
+          "imageCaption": "Agent-specific usage · actual interface with synthetic session data.",
+          "imageWidth": 1400,
+          "imageHeight": 900
+        },
+        {
+          "image": "cinder-range.png",
+          "imageAlt": "Cinder showing the Cost metric over the last seven days.",
+          "imageCaption": "Seven-day cost view · actual interface with synthetic usage totals.",
+          "imageWidth": 1400,
+          "imageHeight": 900
+        },
+        {
+          "image": "cinder-updates.png",
+          "imageAlt": "Cinder's update dialog with example release details and update controls.",
+          "imageCaption": "Update dialog · simulated release information; no update downloaded.",
+          "imageWidth": 1400,
+          "imageHeight": 900
+        }
+      ]
     }
   },
   {
-    "name": "Everglow Desktop",
+    "name": "Everglow",
     "repo": "Everglow-Desktop",
-    "description": "Everglow in a dedicated Windows app, with its own browser profile.",
+    "description": "Cinema, anime, books, manga and manhwa in one place.",
     "category": "Desktop app",
     "language": "Tauri",
     "version": "0.3.2",
     "installer": "Everglow-Desktop-Setup.exe",
     "tag": "v0.3.2",
     "showcase": {
-      "headline": "A dedicated home for Everglow.",
-      "intro": "The Everglow website, in its own Windows application. Keep a separate sign-in profile and use desktop controls without keeping another browser tab open.",
+      "headline": "Something to watch. Something to read.",
+      "intro": "Explore Everglow's cinema, anime, books, and manga/manhwa sections. From finding a movie or a series to choosing your next read, this is the media side of Everglow.",
       "features": [
-        "A persistent, independent browser profile",
-        "Fullscreen and refresh controls",
-        "Desktop update checks built into the app"
+        "Cinema — movies and series",
+        "Anime — shows and episodes",
+        "Books, manga and manhwa — your next read"
       ],
-      "image": "everglow.png",
-      "imageAlt": "Everglow's purple sign-in screen with a numeric keypad.",
-      "imageCaption": "Actual sign-in screen · shown before authentication.",
+      "image": "everglow-anime.png",
+      "imageAlt": "Everglow's anime spotlight showing a clearly labeled demo title and artwork.",
+      "imageCaption": "Public-facing anime interface · demo artwork and title; no private account content.",
       "imageWidth": 1280,
-      "imageHeight": 830,
-      "short": "Your own window · Windows",
-      "tone": "plum"
+      "imageHeight": 720,
+      "short": "Cinema, anime & reading",
+      "tone": "plum",
+      "scenes": [
+        {
+          "image": "everglow-cinema.png",
+          "imageAlt": "Everglow's cinema episode list with spoiler controls and episode selection.",
+          "imageCaption": "Cinema episode controls · actual widget with demo content; cropped to the relevant interface.",
+          "imageWidth": 860,
+          "imageHeight": 740
+        },
+        {
+          "image": "everglow-anime.png",
+          "imageAlt": "Everglow's anime spotlight with a featured show, year, genre and viewing controls.",
+          "imageCaption": "Anime spotlight · actual production widget with clearly labeled demo artwork and title.",
+          "imageWidth": 1280,
+          "imageHeight": 720
+        },
+        {
+          "image": "everglow-reading.png",
+          "imageAlt": "Everglow's MangaCelestia guest catalog with manga, manhwa and manhua filters.",
+          "imageCaption": "MangaCelestia · guest catalog preview. Books have a separate section; they are not pictured here.",
+          "imageWidth": 900,
+          "imageHeight": 445
+        }
+      ]
     }
   },
   {

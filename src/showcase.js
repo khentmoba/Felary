@@ -45,9 +45,71 @@ export function initShowcase(root) {
   root.dataset.enhanced = '';
 }
 
+export function featureFrameIndex(featureTops, readingLine) {
+  let frame=0;
+  featureTops.forEach((top,i)=>{ if (top <= readingLine) frame=i+1; });
+  return frame;
+}
+
+export function initFeatureStory(root) {
+  const frames=[...root.querySelectorAll('[data-frame]')];
+  const features=[...root.querySelectorAll('[data-feature-step]')];
+  if (frames.length < 2 || typeof IntersectionObserver === 'undefined') return;
+  const caption=root.querySelector('[data-gallery-caption]');
+  const link=root.querySelector('[data-gallery-link]');
+  const layout=matchMedia('(min-width: 900px) and (min-height: 700px) and (prefers-reduced-motion: no-preference)');
+  let observer;
+  let desired=0;
+  let shown=0;
+  const paint=frame=>{
+    let image=frames[frame].querySelector('img');
+    if (frame && (!image || (image.complete && !image.naturalWidth))) {
+      frame=0;
+      image=frames[0].querySelector('img');
+    }
+    if (image && !image.complete) { image.loading='eager'; return; }
+    if (frame===shown) return;
+    frames.forEach((el,i)=>{
+      el.classList.toggle('is-current',i===frame);
+      el.setAttribute('aria-hidden',String(i!==frame));
+    });
+    features.forEach((feature,i)=>feature.toggleAttribute('data-reading',i+1===frame));
+    caption.textContent=frames[frame].dataset.caption;
+    if (image) link.href=image.getAttribute('src');
+    shown=frame;
+  };
+  const update=()=>{
+    desired=root.dataset.sceneScroll==='true'
+      ? featureFrameIndex(features.map(el=>el.getBoundingClientRect().top),innerHeight*.45)
+      : 0;
+    paint(desired);
+  };
+  frames.forEach(frame=>{
+    const image=frame.querySelector('img');
+    image?.addEventListener('load',update);
+    image?.addEventListener('error',update);
+  });
+  const configure=()=>{
+    observer?.disconnect();
+    const enabled=layout.matches && CSS.supports('animation-timeline: view()');
+    root.dataset.sceneScroll=String(enabled);
+    if (enabled) {
+      const top=Math.round(innerHeight*.45);
+      const bottom=innerHeight-top-1;
+      observer=new IntersectionObserver(update,{rootMargin:`-${top}px 0px -${bottom}px 0px`,threshold:0});
+      features.forEach(feature=>observer.observe(feature));
+    }
+    update();
+  };
+  layout.addEventListener('change',configure);
+  window.addEventListener('resize',configure);
+  window.addEventListener('hashchange',update);
+  configure();
+}
+
 if (typeof document !== 'undefined') {
   document.querySelectorAll('.spotlight').forEach(initShowcase);
-  document.querySelectorAll('.spotlight-media img, .story-image img').forEach(img => {
+  document.querySelectorAll('.spotlight-media img, .story-image img, .feature-inline img').forEach(img => {
     const fallback = () => {
       const message = document.createElement('p');
       message.className = 'image-error';
@@ -57,4 +119,5 @@ if (typeof document !== 'undefined') {
     img.addEventListener('error', fallback, { once: true });
     if (img.complete && !img.naturalWidth) fallback();
   });
+  document.querySelectorAll('.app-story').forEach(initFeatureStory);
 }
