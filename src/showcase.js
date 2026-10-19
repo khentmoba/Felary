@@ -52,6 +52,8 @@ export function featureFrameIndex(featureTops, readingLine, ready=true) {
   return frame;
 }
 
+const readingLine=pin=>Math.max(pin,innerHeight*.45);
+
 export function initFeatureStory(root) {
   const frames=[...root.querySelectorAll('[data-frame]')];
   const features=[...root.querySelectorAll('[data-feature-step]')];
@@ -62,7 +64,7 @@ export function initFeatureStory(root) {
   const caption=root.querySelector('[data-gallery-caption]');
   const link=root.querySelector('[data-gallery-link]');
   const layout=matchMedia('(min-width: 900px) and (min-height: 700px) and (prefers-reduced-motion: no-preference)');
-  let observer;
+  let observers=[];
   let desired=0;
   let shown=0;
   const paint=frame=>{
@@ -83,9 +85,11 @@ export function initFeatureStory(root) {
     shown=frame;
   };
   const update=()=>{
-    const line=parseFloat(getComputedStyle(figure).top)||0;
-    const ready=body.getBoundingClientRect().top<=line+1
-      && figure.getBoundingClientRect().top<=line+1
+    const pin=parseFloat(getComputedStyle(figure).top)||0;
+    // Features light up as they pass mid-screen, where the reader is looking.
+    const line=readingLine(pin);
+    const ready=body.getBoundingClientRect().top<=pin+1
+      && figure.getBoundingClientRect().top<=pin+1
       && intro.getBoundingClientRect().bottom<=line;
     desired=root.dataset.sceneScroll==='true'
       ? featureFrameIndex(features.map(el=>el.getBoundingClientRect().top),line,ready)
@@ -97,25 +101,32 @@ export function initFeatureStory(root) {
     image?.addEventListener('load',update);
     image?.addEventListener('error',update);
   });
-  // The last feature must reach the top while the picture is still pinned.
+  // The last feature must reach the reading line while the picture is still pinned.
   const sizeTail=enabled=>{
     body.style.paddingBottom='';
     if (!enabled) return;
+    const pin=parseFloat(getComputedStyle(figure).top)||0;
     const below=body.getBoundingClientRect().bottom-features[features.length-1].getBoundingClientRect().top;
-    const extra=Math.ceil(figure.offsetHeight-below+8);
+    const extra=Math.ceil(pin+figure.offsetHeight-readingLine(pin)-below+8);
     if (extra>0) body.style.paddingBottom=extra+'px';
   };
   const configure=()=>{
-    observer?.disconnect();
+    observers.forEach(o=>o.disconnect());
+    observers=[];
     const enabled=layout.matches && CSS.supports('animation-timeline: view()');
     root.dataset.sceneScroll=String(enabled);
     sizeTail(enabled);
     if (enabled) {
-      const top=Math.round(parseFloat(getComputedStyle(figure).top)||0);
-      const bottom=innerHeight-top-1;
-      observer=new IntersectionObserver(update,{rootMargin:`-${top}px 0px -${bottom}px 0px`,threshold:0});
-      features.forEach(feature=>observer.observe(feature));
-      observer.observe(intro);
+      // One line where the picture pins, one where features are read.
+      const pin=parseFloat(getComputedStyle(figure).top)||0;
+      const watch=(line,targets)=>{
+        const top=Math.round(line);
+        const observer=new IntersectionObserver(update,{rootMargin:`-${top}px 0px -${innerHeight-top-1}px 0px`,threshold:0});
+        targets.forEach(el=>observer.observe(el));
+        observers.push(observer);
+      };
+      watch(pin,[body,figure]);
+      watch(readingLine(pin),[intro,...features]);
     }
     update();
   };
