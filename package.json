@@ -7,7 +7,7 @@
     "build": "node scripts/build.mjs",
     "dev": "node scripts/serve.mjs",
     "test": "node --test",
-    "deploy": "wrangler deploy",
+    "deploy": "wrangler pages deploy dist --project-name felary --branch main",
     "preview": "wrangler dev"
   },
   "engines": {
