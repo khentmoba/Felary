@@ -24,6 +24,14 @@
       "imageCaption": "Felaris Home · actual v0.3.1 interface running with sample tabs.",
       "imageWidth": 1280,
       "imageHeight": 800,
+      "video": {
+        "file": "felaris-demo.mp4",
+        "poster": "felaris-poster.jpg",
+        "width": 1600,
+        "height": 1000,
+        "label": "Felaris demo: reordering tabs in the sidebar, the Ctrl+T search, site controls, muting and sleeping tabs, and keyboard tab moves.",
+        "caption": "Felaris v0.3.1 in use · 26-second demo."
+      },
       "short": "Web browser · Windows",
       "tone": "glacier",
       "scenes": [

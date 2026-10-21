@@ -1,15 +1,14 @@
 {
   "Cinder": {
-    "tag": "v0.3.0",
-    "version": "0.3.0",
-    "installer": "Cinder_0.3.0_x64-setup.exe",
+    "tag": "v0.4.0",
+    "version": "0.4.0",
+    "installer": "Cinder_0.4.0_x64-setup.exe",
     "extras": [],
-    "released": "2026-10-19",
+    "released": "2026-10-21",
     "notes": [
-      "In-place NSIS update mechanism and settings modal.",
-      "Add All time range and improve pricing accuracy for proxy models.",
-      "Fast startup with persistent cache & parallel parsing; native in-app self-update & settings.",
-      "Rebuild layout, chart, filters and limits."
+      "Correct model logos for GLM, Gemini and proxy routes.",
+      "Add cache analytics, quota pacing, and expanded breakdown views.",
+      "Quota centre, quota alerts, project rollup, billing modes and FFF-speed scanning."
     ]
   },
   "Everglow-Desktop": {
@@ -49,17 +48,17 @@
     ]
   },
   "SpeakFlow": {
-    "tag": "1.1.5",
-    "version": "1.1.5",
-    "installer": "SpeakFlow_1.1.5_x64-setup.exe",
+    "tag": "1.1.6",
+    "version": "1.1.6",
+    "installer": "SpeakFlow_1.1.6_x64-setup.exe",
     "extras": [],
     "released": "2026-10-21",
     "notes": [
-      "Added Parakeet, Canary-Qwen, and Cohere Transcribe as local transcription options.",
-      "Made Qwen3-ASR 1.7B the default transcription engine.",
-      "Added OpenRouter support and improved AI provider fallback and reasoning controls.",
-      "Added profile save notifications.",
-      "Improved settings handling and R2T2 transcription finalization."
+      "Restyled the floating subtitle pill in the dark theme with an electric cyan glow.",
+      "Added a double-tap hotkey lock so you can keep dictating without holding the key.",
+      "Added Escape to cancel a recording without transcribing or pasting it.",
+      "Added Ctrl+Alt+V to paste your last dictation again.",
+      "Added per-site app rules, so browser rules can match github.com, x.com and other sites instead of only the browser program."
     ]
   }
 }

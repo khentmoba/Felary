@@ -62,6 +62,10 @@ export function validateProjects(projects) {
       if (!/^[a-z0-9-]+[.]png$/.test(s.image) || !['forest','cobalt','plum','glacier'].includes(s.tone)) throw new Error('Invalid showcase image or tone.');
       if (!Array.isArray(s.features) || !s.features.length || !s.features.every(v=>typeof v==='string' && v.trim())) throw new Error('Add showcase features.');
       if (![s.imageWidth,s.imageHeight].every(v=>Number.isInteger(v) && v>0)) throw new Error('Add image dimensions.');
+      if (s.video !== undefined) {
+        const v=s.video;
+        if (!v || !/^[a-z0-9-]+[.]mp4$/.test(v.file) || !/^[a-z0-9-]+[.](jpg|png)$/.test(v.poster) || ![v.width,v.height].every(n=>Number.isInteger(n) && n>0) || !text(v.label) || !text(v.caption)) throw new Error('Demo videos need a safe .mp4, a poster, dimensions, a label and a caption.');
+      }
       if (s.scenes !== undefined) {
         if (!Array.isArray(s.scenes) || s.scenes.length !== s.features.length) throw new Error('Each feature needs one matching scene.');
         for (const scene of s.scenes) {
@@ -80,6 +84,9 @@ export function validateProjects(projects) {
 }
 const imageAsset = (s,eager=false) => `<img src="/assets/${s.image}" alt="${escapeHtml(s.imageAlt)}" width="${s.imageWidth}" height="${s.imageHeight}" loading="${eager?'eager':'lazy'}" decoding="async"${eager?' fetchpriority="high"':''}>`;
 const image = (p,eager=false) => imageAsset(p.showcase,eager);
+// Demo videos play muted and looped like a moving plate; showcase.js adds pause and sound buttons and drops the native controls.
+const demoVideo = v => `<div class="video-frame"><video class="demo-video" src="/assets/${v.file}" poster="/assets/${v.poster}" width="${v.width}" height="${v.height}" aria-label="${escapeHtml(v.label)}" autoplay muted loop playsinline controls preload="metadata"><a href="/assets/${v.file}">Watch the demo video</a></video></div>`;
+const plate = (p,eager=false) => p.showcase.video ? demoVideo(p.showcase.video) : image(p,eager);
 function renderStory(p,onPage=false) {
   const site=p.page && !onPage;
   const s=p.showcase;
@@ -93,7 +100,7 @@ export function renderProjects(projects) {
   const featured=projects.filter(p=>p.showcase);
   return {
     tabs: featured.map((p,i)=>`<a class="app-choice" id="choice-${slug(p)}" href="#app-${slug(p)}" data-panel="spotlight-${slug(p)}"><strong>${escapeHtml(p.name)}</strong><small>${escapeHtml(p.showcase.short)}</small>${arrow}</a>`).join('\n'),
-    panels: featured.map((p,i)=>`<div class="spotlight-panel ${p.showcase.tone}${p.showcase.artwork?' artwork':''}" id="spotlight-${slug(p)}"${i?' hidden':''}>${p.page?`<a class="spotlight-media" href="${pageHref(p)}" aria-label="Visit the ${escapeHtml(p.name)} site">${image(p,i===0)}</a>`:`<div class="spotlight-media">${image(p,i===0)}</div>`}<div class="spotlight-caption"><h2>${escapeHtml(p.showcase.headline)}</h2><a href="${p.page?pageHref(p):'#app-'+slug(p)}">${p.page?'Visit the '+escapeHtml(p.name)+' site':'Explore '+escapeHtml(p.name)} ${arrow}</a></div><p class="media-note">${escapeHtml(p.showcase.imageCaption)}</p></div>`).join('\n'),
+    panels: featured.map((p,i)=>`<div class="spotlight-panel ${p.showcase.tone}${p.showcase.artwork?' artwork':''}" id="spotlight-${slug(p)}"${i?' hidden':''}>${p.page && !p.showcase.video?`<a class="spotlight-media" href="${pageHref(p)}" aria-label="Visit the ${escapeHtml(p.name)} site">${image(p,i===0)}</a>`:`<div class="spotlight-media">${plate(p,i===0)}</div>`}<div class="spotlight-caption"><h2>${escapeHtml(p.showcase.headline)}</h2><a href="${p.page?pageHref(p):'#app-'+slug(p)}">${p.page?'Visit the '+escapeHtml(p.name)+' site':'Explore '+escapeHtml(p.name)} ${arrow}</a></div><p class="media-note">${escapeHtml(p.showcase.video?.caption || p.showcase.imageCaption)}</p></div>`).join('\n'),
     stories: featured.map(p=>renderStory(p)).join('\n'),
     footer: footerApps(projects),
     work: projects.filter(p=>!p.showcase).map(p=>`<article class="project"><div><h3><a href="${base(p)}">${escapeHtml(p.name)} ${arrow}</a></h3><p>${escapeHtml(p.description)}</p></div><span class="project-meta">${escapeHtml(p.language)}</span></article>`).join('\n'),
@@ -148,7 +155,7 @@ export function renderAppPage(p, projects) {
         <div class="hero-brand">${appIcon(g,'hero-icon',true)}<h1 id="app-name">${name}</h1><p class="hero-meta"><span>${escapeHtml(p.category)}</span><span>Windows</span>${version}${p.released?`<a href="#whats-new">Updated ${released(p)}</a>`:''}</p></div>
         <div class="hero-copy"><p class="hero-headline">${escapeHtml(s.headline)}</p><p class="hero-summary">${escapeHtml(g.summary)}</p><div class="story-actions">${primary('Download for Windows')}<a class="text-link" href="#features">See how it works ${down}</a></div></div>
       </div>
-      <figure class="hero-plate"><div class="hero-image ${s.tone}">${imageAsset(s,true)}</div><figcaption>${escapeHtml(s.imageCaption)} <a href="/assets/${s.image}">View full image ${arrow}</a></figcaption></figure>
+      <figure class="hero-plate"><div class="hero-image ${s.tone}">${plate(p,true)}</div><figcaption>${s.video?`${escapeHtml(s.video.caption)} <a href="/assets/${s.video.file}">Open the video ${arrow}</a>`:`${escapeHtml(s.imageCaption)} <a href="/assets/${s.image}">View full image ${arrow}</a>`}</figcaption></figure>
       <dl class="fact-row">${g.facts.map(f=>`<div><dt>${escapeHtml(f.label)}</dt><dd>${escapeHtml(f.value)}</dd></div>`).join('')}</dl>
     </section>
     <section id="features" class="wrap app-tour" aria-labelledby="features-title"><div class="section-heading"><h2 id="features-title">A closer look<br>at ${name}.</h2><p>The real interface, one feature at a time.</p></div><div class="app-stories">${renderStory(p,true)}</div></section>
@@ -182,6 +189,7 @@ export async function build({ live = process.env.FELARY_RELEASES !== 'offline' }
   const parts=renderProjects(projects);
   for(const p of projects.filter(p=>p.showcase)) {
     for(const scene of [p.showcase,...(p.showcase.scenes||[])]) await readFile('src/assets/'+scene.image);
+    if (p.showcase.video) for (const file of [p.showcase.video.file,p.showcase.video.poster]) await readFile('src/assets/'+file);
     if (p.page) await readFile('src/assets/'+p.page.icon);
   }
   let html=await readFile('src/index.html','utf8');

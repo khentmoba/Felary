@@ -42,7 +42,13 @@ test('spotlight has four matched choices and one visible initial panel', () => {
   assert.ok(stories.includes('Actual Cinder interface · demo data, not personal usage.'));
   assert.equal(projects.find(p=>p.repo==='Cinder').showcase.artwork,undefined);
   assert.ok(!panels.includes('spotlight-panel cobalt artwork'));
-  assert.ok(panels.includes('fetchpriority="high"'));
+  const first=projects.find(p=>p.showcase);
+  if (first.showcase.video) {
+    assert.ok(panels.includes('src="/assets/'+first.showcase.video.file+'"'));
+    assert.ok(panels.includes('poster="/assets/'+first.showcase.video.poster+'"'));
+  }
+  const imageProjects=projects.map(p=>p===first?{...p,showcase:{...p.showcase,video:undefined}}:p);
+  assert.ok(renderProjects(imageProjects).panels.includes('fetchpriority="high"'));
 });
 
 test('spotlight keyboard selection wraps and supports first and last', () => {
@@ -231,4 +237,19 @@ test('builds publish the releases they used, and "New" fades after 30 days', asy
   assert.ok(isRecent('2026-09-22',now));
   assert.ok(!isRecent('2026-09-20',now));
   assert.ok(!isRecent('2026-11-01',now));
+});
+
+test('demo videos replace the plate on the homepage and app page, safely', () => {
+  const p=projects.find(p=>p.page);
+  const video={file:'felaris-demo.mp4',poster:'felaris-demo-poster.jpg',width:1600,height:1000,label:'Felaris demo',caption:'Real app <demo>'};
+  const withVideo=[{...p,showcase:{...p.showcase,video}},...projects.filter(o=>o!==p)];
+  const {panels}=renderProjects(withVideo);
+  assert.ok(panels.includes('<video class="demo-video" src="/assets/felaris-demo.mp4" poster="/assets/felaris-demo-poster.jpg"'));
+  assert.ok(panels.includes('autoplay muted loop playsinline controls'));
+  assert.ok(!/<a [^>]*class="spotlight-media"[^>]*>[^]*?<video/.test(panels.split('\n')[0]),'Videos are not wrapped in a link');
+  assert.ok(panels.includes('Real app &lt;demo&gt;'));
+  const page=renderAppPage(withVideo[0],withVideo);
+  assert.ok(page.includes('class="hero-image glacier"><div class="video-frame"><video'));
+  assert.ok(page.includes('href="/assets/felaris-demo.mp4">Open the video'));
+  for(const bad of [{...video,file:'../x.mp4'},{...video,poster:'x.gif'},{...video,width:0},{...video,caption:''}]) assert.throws(()=>validateProjects([{...p,showcase:{...p.showcase,video:bad}}]));
 });

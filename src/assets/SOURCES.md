@@ -11,6 +11,8 @@ Source: https://github.com/khentmoba/Felaris/tree/e0c4d06b03bed3bdaf5f549efdca16
 - `felaris-site-controls.png`: 1280 × 800 capture of the sidebar's Site controls panel (`src/ui.html`) opened from the address bar lock icon for a sample HTTPS origin, showing connection details, permission defaults, and the cookie/site-data clearing action.
 - `felaris-sidebar.png`: 520 × 800 crop of the Felaris v0.3.1 sidebar showing a pinned tab, an active tab, an audio-playing tab with its one-click speaker mute button, a sleeping tab marked with a moon, Downloads, and the workspace switcher.
 
+- `felaris-demo.mp4`, `felaris-poster.jpg`: 25.8-second 1600 × 1000 Remotion video (source in the Felaris repository under `promo-video-v2/`, not committed) built from screen captures of an isolated Felaris v0.3.1 instance with its own profile. Pages shown: Felaris Home, the public Chrome for Developers site, and a local tone test page. No personal browsing data. The music is synthesized in code for this video.
+
 These are captures of the unmodified Felaris v0.3.1 HTML/CSS/JS surfaces against UI fixtures. They show presentation, not native WebView2 tab sleeping or memory behaviour.
 
 ## App icons
