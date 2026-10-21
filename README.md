@@ -22,6 +22,12 @@ npm run build
 
 The production site is written to `dist/`. Serve that folder, not the repository root. No server, database, or API key is needed in production. A small local JavaScript module enhances the app spotlight with keyboard-accessible tabs. Without JavaScript, the introduction, app stories, pictures, source links and downloads remain available through native anchor links.
 
+## App pages
+
+Each featured app has its own site at `/apps/<name>/`: `/apps/felaris/`, `/apps/speakflow/`, `/apps/cinder/` and `/apps/everglow/`. A page has a hero with the app icon, name, summary and download button; a full-width screenshot and key facts; the same scroll-driven feature tour as the homepage; detail sections (feature grids, or tables such as SpeakFlow's engines and Felaris' shortcuts); a download block with requirements, extra assets and release links; and links to the other apps. The homepage spotlight, story titles and download rows link to these pages.
+
+Pages are generated at build time from each project's `page` object in `src/projects.json`: `summary`, `icon` with `iconWidth`/`iconHeight`, `facts` (`label`/`value`), `sections` (each with a unique `id`, a `title`, an optional `intro`, and either `items` of `title`/`text` or a `table` of `columns`/`rows`), `requirements`, optional `extras` (other `.exe` assets from the same release) and an optional `note`. The URL comes from the app name. A `page` requires a `showcase`. The build validates the shape and checks that the icon exists.
+
 ## Scroll-driven exhibition
 
 On supporting browsers, app screenshots rise and scale into their plates while thin silver progress lines and readable feature emphasis follow scrolling in both directions. These effects work on narrow previews and phones too. On desktop viewports at least 900px wide and 700px tall, screenshots additionally stay in view while their introductions and features scroll past. A small IntersectionObserver controller switches feature screenshots in the existing JavaScript module; no runtime dependency or paid service is added.

@@ -2,6 +2,27 @@
 
 These are real application interfaces, not AI-generated app screens. Every PNG embeds its origin metadata. Demo data and simulated operations are identified in the site captions. Captures prove presentation only, not microphone access, cloud recognition, updates, playback or catalog availability.
 
+## Felaris
+
+Source: https://github.com/khentmoba/Felaris/tree/11d0379fe57e88fce416f6cb094456c909fcaf4f/docs/pr-evidence
+
+- `felaris-home.png`: original `new-tab.png` capture (1280 × 798) of the actual browser UI loaded with the repository's UI test fixture: sample tabs and a sample query, no personal browsing data.
+- `felaris-new-tab.png`: original `after.png` capture of the floating new-tab search, same fixture.
+- `felaris-sidebar.png`: `after.png` cropped to its left 520 × 798 pixels, showing the sidebar and the sleeping-tab marker.
+
+These are WebView captures against fixtures. They show presentation, not tab sleeping or memory behaviour.
+
+## App icons
+
+Each app page uses the app's official icon, resized to 256 × 256 with no other changes:
+
+- `felaris-icon.png`: https://github.com/khentmoba/Felaris/blob/7cb2978203fda24700f5a26e08df7291a3427f82/assets/felaris-icon.png (the mark shipped in v0.3.0)
+- `speakflow-icon.png`: https://github.com/khentmoba/SpeakFlow/blob/d98869cbe8b04154c166f367a5c4089934f9f814/src-tauri/icons/128x128@2x.png
+- `cinder-icon.png`: https://github.com/khentmoba/Cinder/blob/7404e34b28cc231f0807dfac7f5762484f21fbfa/src-tauri/icons/128x128@2x.png
+- `everglow-icon.png`: https://github.com/khentmoba/Everglow-Desktop/blob/2e58246013e3bac292e9bbcde8f75e7c6a7ec953/src-tauri/icons/icon.png
+
+App page copy comes from each repository's README and claims nothing those documents don't state.
+
 ## SpeakFlow
 
 Source: https://github.com/khentmoba/SpeakFlow/tree/63d3dc3a218d5e275b323130bed0cd84b366fd4d

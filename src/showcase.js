@@ -138,7 +138,7 @@ export function initFeatureStory(root) {
 
 if (typeof document !== 'undefined') {
   document.querySelectorAll('.spotlight').forEach(initShowcase);
-  document.querySelectorAll('.spotlight-media img, .story-image img, .feature-inline img').forEach(img => {
+  document.querySelectorAll('.spotlight-media img, .story-image img, .feature-inline img, .hero-image img').forEach(img => {
     const fallback = () => {
       const message = document.createElement('p');
       message.className = 'image-error';
