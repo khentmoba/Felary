@@ -5,45 +5,45 @@
     "description": "A smooth, lightweight modern browser built in Rust.",
     "category": "Web browser",
     "language": "Rust",
-    "version": "0.3.0",
+    "version": "0.3.1",
     "installer": "felaris-setup.exe",
-    "tag": "v0.3.0",
+    "tag": "v0.3.1",
     "showcase": {
       "headline": "Browse lighter. Stay in flow.",
       "intro": "Felaris is a fast, lightweight browser for Windows. Tabs live in a calm sidebar, Ctrl+T opens a floating search over the page, and tabs you aren't using go to sleep so your PC stays responsive.",
       "features": [
         "Floating new-tab search across your tabs, history and shortcuts",
-        "Brave Search by default, with suggestions kept on your PC",
-        "Idle tabs sleep to give memory back"
+        "Site controls for HTTPS security, permissions and clearing site data",
+        "Idle tabs sleep and playing tabs mute right from the sidebar"
       ],
       "image": "felaris-home.png",
-      "imageAlt": "Felaris Home with its sidebar of tabs, a search box that uses Brave Search, and eight site shortcuts.",
-      "imageCaption": "Felaris Home · actual interface running against a test page with sample tabs.",
+      "imageAlt": "Felaris Home with its sidebar of tabs, the standalone Felaris mark, a search box that uses Brave Search, and eight site shortcuts.",
+      "imageCaption": "Felaris Home · actual v0.3.1 interface running with sample tabs.",
       "imageWidth": 1280,
-      "imageHeight": 798,
+      "imageHeight": 800,
       "short": "Web browser · Windows",
       "tone": "glacier",
       "scenes": [
         {
           "image": "felaris-new-tab.png",
-          "imageAlt": "The floating new-tab search open over Felaris Home, suggesting matching open tabs from two workspaces.",
-          "imageCaption": "Floating new-tab search · matching open tabs from a test page with sample tabs.",
+          "imageAlt": "The floating new-tab search open over Felaris Home, suggesting matching open tabs from two workspaces and recent history with site favicons.",
+          "imageCaption": "Floating new-tab search · open tabs across workspaces and history with site favicons.",
           "imageWidth": 1280,
-          "imageHeight": 798
+          "imageHeight": 800
         },
         {
-          "image": "felaris-home.png",
-          "imageAlt": "Felaris' floating search with a typed query and a single Search with Brave suggestion.",
-          "imageCaption": "Searching with Brave · actual interface, sample query.",
+          "image": "felaris-site-controls.png",
+          "imageAlt": "Felaris with the Site controls panel open from the address bar lock icon, showing HTTPS encryption details, permission settings, and Clear cookies and site data.",
+          "imageCaption": "Site controls · inspect HTTPS security and clear cookies or site data from the lock icon.",
           "imageWidth": 1280,
-          "imageHeight": 798
+          "imageHeight": 800
         },
         {
           "image": "felaris-sidebar.png",
-          "imageAlt": "The Felaris sidebar listing tabs in the General workspace, one marked with a moon and a \"1 tab sleeping\" status at the bottom.",
-          "imageCaption": "Sidebar · a sleeping tab is marked with a moon; sample tabs from a test page.",
+          "imageAlt": "The Felaris sidebar listing a pinned tab, an active tab, an audio-playing tab with its speaker mute button, and a sleeping tab marked with a moon.",
+          "imageCaption": "Sidebar · pinned tabs, one-click tab mute, and a sleeping tab marked with a moon.",
           "imageWidth": 520,
-          "imageHeight": 798
+          "imageHeight": 800
         }
       ]
     },
@@ -78,11 +78,11 @@
           "items": [
             {
               "title": "Zen-style sidebar",
-              "text": "Tabs, pins and workspaces sit in a 260px sidebar that folds into a 56px rail with Ctrl+Shift+B. Drag tabs to reorder them or right-click for quick actions."
+              "text": "Tabs, pins and workspaces sit in a 260px sidebar that folds into a 56px rail with Ctrl+Shift+B. Drag tabs or press Alt+Shift+Up/Down to reorder them, click the speaker icon to mute a noisy tab, or right-click for quick actions."
             },
             {
               "title": "Workspaces",
-              "text": "Group tabs by task and switch with Alt+1 to 9. Workspaces organise tabs, not accounts, so your logins carry across them."
+              "text": "Group tabs by task and switch with Alt+1 to 9. Workspaces organise tabs, not accounts, so your logins carry across them. Rename or delete workspaces from the picker without reloading live pages."
             },
             {
               "title": "Private tabs",
@@ -93,8 +93,8 @@
               "text": "uBlock Origin Lite is fetched on first launch, checked against a known hash, and loaded into every tab. Switch it off in Settings whenever you like."
             },
             {
-              "title": "Bookmarks & history",
-              "text": "Press Ctrl+D to bookmark a page. Bookmarks come first in new-tab suggestions and at the top of History (Ctrl+H)."
+              "title": "Bookmarks & local suggestions",
+              "text": "Press Ctrl+D to bookmark a page. The address bar and floating search suggest open tabs, bookmarks, history and shortcuts with site favicons, without sending autocomplete queries to the network."
             },
             {
               "title": "Session recovery",
@@ -112,8 +112,8 @@
               "text": "Older background tabs unload once you have about twelve live pages. Pinned tabs, active downloads, playing media and pages with unsaved edits stay awake."
             },
             {
-              "title": "Sleep on demand",
-              "text": "Press Ctrl+Shift+S to unload background tabs right away. Selecting a sleeping tab reloads it from its saved address."
+              "title": "Sleep on demand & tab mute",
+              "text": "Press Ctrl+Shift+S to unload background tabs right away. Selecting a sleeping tab reloads it from its saved address, and muted tabs keep their mute state across sleep and restarts."
             },
             {
               "title": "Floating sign-in windows",
@@ -121,11 +121,11 @@
             },
             {
               "title": "Native downloads",
-              "text": "Downloads show progress and file actions, and Felaris warns you before closing while a download is still running."
+              "text": "Downloads show progress and file actions, empty download-only tabs close themselves automatically, and Felaris warns you before closing while a transfer is still running."
             },
             {
-              "title": "Connection details",
-              "text": "The address bar shows a lock for HTTPS and a warning for plain HTTP. Open it to see the site’s origin or clear that site’s cookies and data."
+              "title": "Site controls & permissions",
+              "text": "Click the lock or warning icon in the address bar to inspect the site’s origin and HTTPS status or clear its cookies and stored data. Permission choices are remembered in your profile across visits."
             },
             {
               "title": "Ready to be your default",
@@ -166,6 +166,10 @@
               [
                 "Alt + 1 to 9",
                 "Switch workspace"
+              ],
+              [
+                "Alt + Shift + Up / Down",
+                "Reorder a focused tab within its group"
               ],
               [
                 "Ctrl + Shift + B",

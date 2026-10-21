@@ -151,7 +151,7 @@ test('every featured app gets a dedicated page with its own hero, details and do
     for(const o of featured.filter(o=>o!==p)) assert.ok(html.includes('href="'+pageHref(o)+'"'));
     assert.ok(!html.includes('href="'+pageHref(p)+'"'),'A page does not link to itself');
   }
-  assert.ok(renderAppPage(featured[0],projects).includes('/releases/download/v0.3.0/felaris.exe'));
+  assert.ok(renderAppPage(featured[0],projects).includes('/releases/download/v0.3.1/felaris.exe'));
 });
 
 test('app page content is validated and escaped', () => {
