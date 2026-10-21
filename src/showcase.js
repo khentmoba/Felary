@@ -45,6 +45,11 @@ export function initShowcase(root) {
   root.dataset.enhanced = '';
 }
 
+export function isRecent(date, now, days=30) {
+  const age=now-Date.parse(date+'T00:00:00Z');
+  return age>=0 && age<days*864e5;
+}
+
 export function featureFrameIndex(featureTops, readingLine, ready=true) {
   if (!ready) return 0;
   let frame=0;
@@ -149,4 +154,12 @@ if (typeof document !== 'undefined') {
     if (img.complete && !img.naturalWidth) fallback();
   });
   document.querySelectorAll('.app-story').forEach(initFeatureStory);
+  // Release dates are baked in at build time; "New" depends on today, so it is decided here.
+  document.querySelectorAll('.download time[data-released]').forEach(time => {
+    if (!isRecent(time.dateTime, Date.now())) return;
+    const tag = document.createElement('span');
+    tag.className = 'fresh';
+    tag.textContent = 'New';
+    time.closest('.download').querySelector('h3').append(tag);
+  });
 }

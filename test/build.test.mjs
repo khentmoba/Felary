@@ -2,7 +2,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { escapeHtml, validateProjects, renderProjects, renderAppPage, pageHref, build } from '../scripts/build.mjs';
-import { nextTabIndex, featureFrameIndex } from '../src/showcase.js';
+import { nextTabIndex, featureFrameIndex, isRecent } from '../src/showcase.js';
+import { releaseNotes, fromGitHub, fetchReleases, applyReleases } from '../scripts/releases.mjs';
 const projects = JSON.parse(await readFile(new URL('../src/projects.json',import.meta.url),'utf8'));
 
 test('projects retain source links and exact versioned download URLs', () => {
@@ -115,9 +116,9 @@ test('scroll motion is native, opt-in, and leaves the static fallback intact', a
 });
 
 test('production includes complete stories, local assets, unique IDs and valid anchors', async () => {
-  await build();
+  await build({live:false});
   const html=await readFile('dist/index.html','utf8');
-  assert.ok(!/<!-- (PROJECTS|DOWNLOADS|APP STORIES|SPOTLIGHT)/.test(html));
+  assert.ok(!/<!-- (PROJECTS|DOWNLOADS|APP STORIES|SPOTLIGHT|FOOTER)/.test(html));
   for(const id of ['work','downloads','about']) assert.ok(html.includes('id="'+id+'"'));
   for(const p of projects) assert.ok(html.includes(p.name));
   const ids=[...html.matchAll(/\sid="([^"]+)"/g)].map(m=>m[1]);
@@ -166,7 +167,7 @@ test('app page content is validated and escaped', () => {
 });
 
 test('built app pages have unique IDs, valid anchors and existing local assets', async () => {
-  await build();
+  await build({live:false});
   for(const p of projects.filter(p=>p.page)) {
     const html=await readFile('dist'+pageHref(p)+'index.html','utf8');
     const ids=[...html.matchAll(/\sid="([^"]+)"/g)].map(m=>m[1]);
@@ -177,4 +178,57 @@ test('built app pages have unique IDs, valid anchors and existing local assets',
     assert.equal(icon.readUInt32BE(16),p.page.iconWidth);
     assert.equal(icon.readUInt32BE(20),p.page.iconHeight);
   }
+});
+
+const githubRelease = (over={}) => ({tag_name:'2.0.0',published_at:'2026-10-21T13:19:13Z',draft:false,prerelease:false,body:'## What\'s Changed\n* feat: add a **thing** by @khentmoba in https://github.com/khentmoba/SpeakFlow/pull/9\n- fix(ui): [Docs](https://x.y) link\n\n**Full Changelog**: https://github.com/x',assets:[{name:'SpeakFlow_2.0.0_x64-setup.exe'},{name:'SpeakFlow_2.0.0_x64-setup.exe.sig'},{name:'latest.json'}],...over});
+
+test('release notes keep readable lines and drop GitHub plumbing', () => {
+  assert.deepEqual(releaseNotes(githubRelease().body),['Add a thing.','Docs link.']);
+  assert.deepEqual(releaseNotes('Just one paragraph'),['Just one paragraph.']);
+  assert.deepEqual(releaseNotes(null),[]);
+});
+
+test('latest releases are matched by asset pattern and untrusted data is refused', () => {
+  const speakflow=projects.find(p=>p.repo==='SpeakFlow');
+  assert.deepEqual(fromGitHub(speakflow,githubRelease()),{tag:'2.0.0',version:'2.0.0',installer:'SpeakFlow_2.0.0_x64-setup.exe',extras:[],released:'2026-10-21',notes:['Add a thing.','Docs link.']});
+  for(const over of [{prerelease:true},{draft:true},{tag_name:'../x'},{assets:[{name:'notes.txt'}]},{published_at:'soon'}]) assert.equal(fromGitHub(speakflow,githubRelease(over)),null);
+  const felaris=projects.find(p=>p.repo==='Felaris');
+  const r=fromGitHub(felaris,githubRelease({tag_name:'v0.4.0',assets:[{name:'felaris-setup.exe'},{name:'felaris.exe'}]}));
+  assert.equal(r.version,'0.4.0');
+  assert.deepEqual(r.extras,[{label:'Portable .exe',file:'felaris.exe'}]);
+  assert.throws(()=>validateProjects([{...speakflow,release:{installer:'('}}]));
+});
+
+test('a failed release check keeps the saved release, and fresh releases win', async () => {
+  const saved=JSON.parse(await readFile('src/releases.json','utf8'));
+  const offline=await fetchReleases(projects,{fetchImpl:async()=>{throw new Error('offline');}});
+  assert.deepEqual(offline,{});
+  const sf=await fetchReleases(projects,{fetchImpl:async url=>({ok:url.includes('/SpeakFlow/'),status:404,json:async()=>githubRelease()})});
+  assert.deepEqual(Object.keys(sf),['SpeakFlow']);
+  const merged=applyReleases(projects,sf,saved);
+  assert.equal(merged.find(p=>p.repo==='SpeakFlow').installer,'SpeakFlow_2.0.0_x64-setup.exe');
+  assert.equal(merged.find(p=>p.repo==='Cinder').tag,saved.Cinder.tag);
+  assert.equal(merged.find(p=>p.repo==='SLSS'),projects.find(p=>p.repo==='SLSS'));
+  validateProjects(merged);
+  const {downloads}=renderProjects(merged);
+  assert.ok(downloads.includes('/releases/download/2.0.0/SpeakFlow_2.0.0_x64-setup.exe'));
+  assert.ok(downloads.includes('<time datetime="2026-10-21" data-released>21 Oct 2026</time>'));
+  const page=renderAppPage(merged.find(p=>p.repo==='SpeakFlow'),merged);
+  assert.ok(page.includes('id="whats-new"'));
+  assert.ok(page.includes('<li>Add a thing.</li>'));
+  assert.ok(page.includes('href="#whats-new">Updated'));
+  assert.ok(!renderAppPage(projects.find(p=>p.repo==='SpeakFlow'),projects).includes('whats-new'),'No notes, no section');
+});
+
+test('builds publish the releases they used, and "New" fades after 30 days', async () => {
+  await build({live:false});
+  const manifest=JSON.parse(await readFile('dist/releases.json','utf8'));
+  const saved=JSON.parse(await readFile('src/releases.json','utf8'));
+  assert.deepEqual(Object.keys(manifest).sort(),['Cinder','Everglow-Desktop','Felaris','SpeakFlow']);
+  for(const [repo,r] of Object.entries(manifest)) assert.equal(r.tag,saved[repo].tag);
+  const now=Date.parse('2026-10-21T12:00:00Z');
+  assert.ok(isRecent('2026-10-21',now));
+  assert.ok(isRecent('2026-09-22',now));
+  assert.ok(!isRecent('2026-09-20',now));
+  assert.ok(!isRecent('2026-11-01',now));
 });
