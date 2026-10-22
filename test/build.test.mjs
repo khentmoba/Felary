@@ -1,14 +1,15 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { escapeHtml, validateProjects, renderProjects, build } from '../scripts/build.mjs';
-import { nextTabIndex, featureFrameIndex } from '../src/showcase.js';
+import { escapeHtml, validateProjects, renderProjects, renderAppPage, pageHref, build } from '../scripts/build.mjs';
+import { nextTabIndex, featureFrameIndex, isRecent } from '../src/showcase.js';
+import { releaseNotes, fromGitHub, fetchReleases, applyReleases } from '../scripts/releases.mjs';
 const projects = JSON.parse(await readFile(new URL('../src/projects.json',import.meta.url),'utf8'));
 
 test('projects retain source links and exact versioned download URLs', () => {
-  assert.equal(validateProjects(projects).length,5);
+  assert.equal(validateProjects(projects).length,6);
   const parts=renderProjects(projects);
-  assert.equal((parts.downloads.match(/class="download"/g)||[]).length,3);
+  assert.equal((parts.downloads.match(/class="download"/g)||[]).length,4);
   for(const p of projects.filter(p=>p.installer)) {
     const path='/releases/download/'+encodeURIComponent(p.tag)+'/'+encodeURIComponent(p.installer);
     assert.ok(parts.downloads.includes(path));
@@ -27,10 +28,10 @@ test('unsafe text is escaped and malformed content is rejected', () => {
   for(const showcase of [{...projects[0].showcase,image:'../bad.png'},{...projects[0].showcase,tone:'" onmouseover="bad'},{...projects[0].showcase,features:[]},{...projects[0].showcase,imageWidth:0}]) assert.throws(()=>validateProjects([{...projects[0],showcase}]));
 });
 
-test('spotlight has three matched choices and one visible initial panel', () => {
+test('spotlight has four matched choices and one visible initial panel', () => {
   const {tabs,panels,stories}=renderProjects(projects);
-  assert.equal((tabs.match(/class="app-choice"/g)||[]).length,3);
-  assert.equal((panels.match(/ hidden>/g)||[]).length,2);
+  assert.equal((tabs.match(/class="app-choice"/g)||[]).length,4);
+  assert.equal((panels.match(/ hidden>/g)||[]).length,3);
   for(const p of projects.filter(p=>p.showcase)) {
     const slug=p.repo.toLowerCase();
     assert.ok(tabs.includes('data-panel="spotlight-'+slug+'"'));
@@ -41,7 +42,13 @@ test('spotlight has three matched choices and one visible initial panel', () => 
   assert.ok(stories.includes('Actual Cinder interface · demo data, not personal usage.'));
   assert.equal(projects.find(p=>p.repo==='Cinder').showcase.artwork,undefined);
   assert.ok(!panels.includes('spotlight-panel cobalt artwork'));
-  assert.ok(panels.includes('fetchpriority="high"'));
+  const first=projects.find(p=>p.showcase);
+  if (first.showcase.video) {
+    assert.ok(panels.includes('src="/assets/'+first.showcase.video.file+'"'));
+    assert.ok(panels.includes('poster="/assets/'+first.showcase.video.poster+'"'));
+  }
+  const imageProjects=projects.map(p=>p===first?{...p,showcase:{...p.showcase,video:undefined}}:p);
+  assert.ok(renderProjects(imageProjects).panels.includes('fetchpriority="high"'));
 });
 
 test('spotlight keyboard selection wraps and supports first and last', () => {
@@ -57,9 +64,9 @@ test('spotlight keyboard selection wraps and supports first and last', () => {
 
 test('feature scenes match every statement and use safe, complete image metadata', () => {
   const {stories}=renderProjects(projects);
-  assert.equal((stories.match(/data-feature-step=/g)||[]).length,9);
-  assert.equal((stories.match(/class="feature-frame is-current"/g)||[]).length,3);
-  assert.equal((stories.match(/class="feature-inline"/g)||[]).length,9);
+  assert.equal((stories.match(/data-feature-step=/g)||[]).length,12);
+  assert.equal((stories.match(/class="feature-frame is-current"/g)||[]).length,4);
+  assert.equal((stories.match(/class="feature-inline"/g)||[]).length,12);
   for(const p of projects.filter(p=>p.showcase)) {
     assert.equal(p.showcase.scenes.length,p.showcase.features.length);
     for(const scene of p.showcase.scenes) assert.ok(stories.includes('/assets/'+scene.image));
@@ -115,9 +122,9 @@ test('scroll motion is native, opt-in, and leaves the static fallback intact', a
 });
 
 test('production includes complete stories, local assets, unique IDs and valid anchors', async () => {
-  await build();
+  await build({live:false});
   const html=await readFile('dist/index.html','utf8');
-  assert.ok(!/<!-- (PROJECTS|DOWNLOADS|APP STORIES|SPOTLIGHT)/.test(html));
+  assert.ok(!/<!-- (PROJECTS|DOWNLOADS|APP STORIES|SPOTLIGHT|FOOTER)/.test(html));
   for(const id of ['work','downloads','about']) assert.ok(html.includes('id="'+id+'"'));
   for(const p of projects) assert.ok(html.includes(p.name));
   const ids=[...html.matchAll(/\sid="([^"]+)"/g)].map(m=>m[1]);
@@ -135,4 +142,114 @@ test('production includes complete stories, local assets, unique IDs and valid a
   for(const font of ['barlow-condensed-600','manrope-400','manrope-600']) assert.ok((await readFile('dist/assets/fonts/'+font+'.ttf')).length>10000);
   assert.ok((await readFile('dist/_headers','utf8')).includes("script-src 'self'"));
   assert.ok((await readFile('dist/showcase.js','utf8')).includes('aria-selected'));
+});
+
+test('every featured app gets a dedicated page with its own hero, details and download', () => {
+  const featured=projects.filter(p=>p.showcase);
+  assert.deepEqual(featured.map(p=>pageHref(p)),['/apps/felaris/','/apps/speakflow/','/apps/cinder/','/apps/everglow/']);
+  const {panels,stories,downloads}=renderProjects(projects);
+  for(const p of featured) {
+    for(const part of [panels,stories,downloads]) assert.ok(part.includes('href="'+pageHref(p)+'"'),'Home links to '+p.name);
+    const html=renderAppPage(p,projects);
+    assert.ok(html.includes('<h1 id="app-name">'+escapeHtml(p.name)+'</h1>'));
+    assert.ok(html.includes(escapeHtml(p.page.summary)));
+    assert.ok(html.includes('/releases/download/'+encodeURIComponent(p.tag)+'/'+encodeURIComponent(p.installer)));
+    for(const s of p.page.sections) assert.ok(html.includes('id="'+s.id+'"'));
+    for(const o of featured.filter(o=>o!==p)) assert.ok(html.includes('href="'+pageHref(o)+'"'));
+    assert.ok(!html.includes('href="'+pageHref(p)+'"'),'A page does not link to itself');
+  }
+  assert.ok(renderAppPage(featured[0],projects).includes('/releases/download/v0.3.1/felaris.exe'));
+});
+
+test('app page content is validated and escaped', () => {
+  const p=projects.find(p=>p.page);
+  const page=section=>[{...p,page:{...p.page,sections:[section]}}];
+  for(const bad of [{id:'x',title:'T'},{id:'x',title:'T',items:[{title:'a',text:'b'}],table:{columns:['a'],rows:[['b']]}},{id:'x',title:'T',table:{columns:['a','b'],rows:[['only one']]}},{id:'features',title:'T',items:[{title:'a',text:'b'}]},{id:'<x>',title:'T',items:[{title:'a',text:'b'}]}]) assert.throws(()=>validateProjects(page(bad)));
+  for(const g of [{...p.page,icon:'../x.png'},{...p.page,facts:[]},{...p.page,requirements:[]},{...p.page,extras:[{label:'x',file:'x.zip'}]}]) assert.throws(()=>validateProjects([{...p,page:g}]));
+  assert.throws(()=>validateProjects([{...p,showcase:undefined}]));
+  assert.throws(()=>validateProjects([p,{...p,repo:'Other'}]));
+  const html=renderAppPage({...p,page:{...p.page,summary:'<img src=x onerror=alert(1)>'}},projects);
+  assert.ok(html.includes('&lt;img src=x onerror=alert(1)&gt;'));
+});
+
+test('built app pages have unique IDs, valid anchors and existing local assets', async () => {
+  await build({live:false});
+  for(const p of projects.filter(p=>p.page)) {
+    const html=await readFile('dist'+pageHref(p)+'index.html','utf8');
+    const ids=[...html.matchAll(/\sid="([^"]+)"/g)].map(m=>m[1]);
+    assert.equal(new Set(ids).size,ids.length);
+    for(const [,id] of html.matchAll(/href="#([^"]+)"/g)) assert.ok(ids.includes(id),p.name+' missing anchor: '+id);
+    for(const [,asset] of html.matchAll(/(?:src|href)="(\/assets\/[^"]+)"/g)) await readFile('dist'+asset);
+    const icon=await readFile('dist/assets/'+p.page.icon);
+    assert.equal(icon.readUInt32BE(16),p.page.iconWidth);
+    assert.equal(icon.readUInt32BE(20),p.page.iconHeight);
+  }
+});
+
+const githubRelease = (over={}) => ({tag_name:'2.0.0',published_at:'2026-10-21T13:19:13Z',draft:false,prerelease:false,body:'## What\'s Changed\n* feat: add a **thing** by @khentmoba in https://github.com/khentmoba/SpeakFlow/pull/9\n- fix(ui): [Docs](https://x.y) link\n\n**Full Changelog**: https://github.com/x',assets:[{name:'SpeakFlow_2.0.0_x64-setup.exe'},{name:'SpeakFlow_2.0.0_x64-setup.exe.sig'},{name:'latest.json'}],...over});
+
+test('release notes keep readable lines and drop GitHub plumbing', () => {
+  assert.deepEqual(releaseNotes(githubRelease().body),['Add a thing.','Docs link.']);
+  assert.deepEqual(releaseNotes('Just one paragraph'),['Just one paragraph.']);
+  assert.deepEqual(releaseNotes(null),[]);
+});
+
+test('latest releases are matched by asset pattern and untrusted data is refused', () => {
+  const speakflow=projects.find(p=>p.repo==='SpeakFlow');
+  assert.deepEqual(fromGitHub(speakflow,githubRelease()),{tag:'2.0.0',version:'2.0.0',installer:'SpeakFlow_2.0.0_x64-setup.exe',extras:[],released:'2026-10-21',notes:['Add a thing.','Docs link.']});
+  for(const over of [{prerelease:true},{draft:true},{tag_name:'../x'},{assets:[{name:'notes.txt'}]},{published_at:'soon'}]) assert.equal(fromGitHub(speakflow,githubRelease(over)),null);
+  const felaris=projects.find(p=>p.repo==='Felaris');
+  const r=fromGitHub(felaris,githubRelease({tag_name:'v0.4.0',assets:[{name:'felaris-setup.exe'},{name:'felaris.exe'}]}));
+  assert.equal(r.version,'0.4.0');
+  assert.deepEqual(r.extras,[{label:'Portable .exe',file:'felaris.exe'}]);
+  assert.throws(()=>validateProjects([{...speakflow,release:{installer:'('}}]));
+});
+
+test('a failed release check keeps the saved release, and fresh releases win', async () => {
+  const saved=JSON.parse(await readFile('src/releases.json','utf8'));
+  const offline=await fetchReleases(projects,{fetchImpl:async()=>{throw new Error('offline');}});
+  assert.deepEqual(offline,{});
+  const sf=await fetchReleases(projects,{fetchImpl:async url=>({ok:url.includes('/SpeakFlow/'),status:404,json:async()=>githubRelease()})});
+  assert.deepEqual(Object.keys(sf),['SpeakFlow']);
+  const merged=applyReleases(projects,sf,saved);
+  assert.equal(merged.find(p=>p.repo==='SpeakFlow').installer,'SpeakFlow_2.0.0_x64-setup.exe');
+  assert.equal(merged.find(p=>p.repo==='Cinder').tag,saved.Cinder.tag);
+  assert.equal(merged.find(p=>p.repo==='SLSS'),projects.find(p=>p.repo==='SLSS'));
+  validateProjects(merged);
+  const {downloads}=renderProjects(merged);
+  assert.ok(downloads.includes('/releases/download/2.0.0/SpeakFlow_2.0.0_x64-setup.exe'));
+  assert.ok(downloads.includes('<time datetime="2026-10-21" data-released>21 Oct 2026</time>'));
+  const page=renderAppPage(merged.find(p=>p.repo==='SpeakFlow'),merged);
+  assert.ok(page.includes('id="whats-new"'));
+  assert.ok(page.includes('<li>Add a thing.</li>'));
+  assert.ok(page.includes('href="#whats-new">Updated'));
+  assert.ok(!renderAppPage(projects.find(p=>p.repo==='SpeakFlow'),projects).includes('whats-new'),'No notes, no section');
+});
+
+test('builds publish the releases they used, and "New" fades after 30 days', async () => {
+  await build({live:false});
+  const manifest=JSON.parse(await readFile('dist/releases.json','utf8'));
+  const saved=JSON.parse(await readFile('src/releases.json','utf8'));
+  assert.deepEqual(Object.keys(manifest).sort(),['Cinder','Everglow-Desktop','Felaris','SpeakFlow']);
+  for(const [repo,r] of Object.entries(manifest)) assert.equal(r.tag,saved[repo].tag);
+  const now=Date.parse('2026-10-21T12:00:00Z');
+  assert.ok(isRecent('2026-10-21',now));
+  assert.ok(isRecent('2026-09-22',now));
+  assert.ok(!isRecent('2026-09-20',now));
+  assert.ok(!isRecent('2026-11-01',now));
+});
+
+test('demo videos replace the plate on the homepage and app page, safely', () => {
+  const p=projects.find(p=>p.page);
+  const video={file:'felaris-demo.mp4',poster:'felaris-demo-poster.jpg',width:1600,height:1000,label:'Felaris demo',caption:'Real app <demo>'};
+  const withVideo=[{...p,showcase:{...p.showcase,video}},...projects.filter(o=>o!==p)];
+  const {panels}=renderProjects(withVideo);
+  assert.ok(panels.includes('<video class="demo-video" src="/assets/felaris-demo.mp4" poster="/assets/felaris-demo-poster.jpg"'));
+  assert.ok(panels.includes('autoplay muted loop playsinline controls'));
+  assert.ok(!/<a [^>]*class="spotlight-media"[^>]*>[^]*?<video/.test(panels.split('\n')[0]),'Videos are not wrapped in a link');
+  assert.ok(panels.includes('Real app &lt;demo&gt;'));
+  const page=renderAppPage(withVideo[0],withVideo);
+  assert.ok(page.includes('class="hero-image glacier"><div class="video-frame"><video'));
+  assert.ok(page.includes('href="/assets/felaris-demo.mp4">Open the video'));
+  for(const bad of [{...video,file:'../x.mp4'},{...video,poster:'x.gif'},{...video,width:0},{...video,caption:''}]) assert.throws(()=>validateProjects([{...p,showcase:{...p.showcase,video:bad}}]));
 });

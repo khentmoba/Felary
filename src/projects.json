@@ -1,13 +1,245 @@
 [
   {
+    "name": "Felaris",
+    "repo": "Felaris",
+    "description": "A smooth, lightweight modern browser built in Rust.",
+    "category": "Web browser",
+    "language": "Rust",
+    "version": "0.3.1",
+    "installer": "felaris-setup.exe",
+    "tag": "v0.3.1",
+    "release": {
+      "installer": "^felaris-setup\\.exe$"
+    },
+    "showcase": {
+      "headline": "Browse lighter. Stay in flow.",
+      "intro": "Felaris is a fast, lightweight browser for Windows. Tabs live in a calm sidebar, Ctrl+T opens a floating search over the page, and tabs you aren't using go to sleep so your PC stays responsive.",
+      "features": [
+        "Floating new-tab search across your tabs, history and shortcuts",
+        "Site controls for HTTPS security, permissions and clearing site data",
+        "Idle tabs sleep and playing tabs mute right from the sidebar"
+      ],
+      "image": "felaris-home.png",
+      "imageAlt": "Felaris Home with its sidebar of tabs, the standalone Felaris mark, a search box that uses Brave Search, and eight site shortcuts.",
+      "imageCaption": "Felaris Home · actual v0.3.1 interface running with sample tabs.",
+      "imageWidth": 1280,
+      "imageHeight": 800,
+      "video": {
+        "file": "felaris-demo.mp4",
+        "poster": "felaris-poster.jpg",
+        "width": 1600,
+        "height": 1000,
+        "label": "Felaris demo: reordering tabs in the sidebar, the Ctrl+T search, site controls, muting and sleeping tabs, and keyboard tab moves.",
+        "caption": "Felaris v0.3.1 in use · 26-second demo."
+      },
+      "short": "Web browser · Windows",
+      "tone": "glacier",
+      "scenes": [
+        {
+          "image": "felaris-new-tab.png",
+          "imageAlt": "The floating new-tab search open over Felaris Home, suggesting matching open tabs from two workspaces and recent history with site favicons.",
+          "imageCaption": "Floating new-tab search · open tabs across workspaces and history with site favicons.",
+          "imageWidth": 1280,
+          "imageHeight": 800
+        },
+        {
+          "image": "felaris-site-controls.png",
+          "imageAlt": "Felaris with the Site controls panel open from the address bar lock icon, showing HTTPS encryption details, permission settings, and Clear cookies and site data.",
+          "imageCaption": "Site controls · inspect HTTPS security and clear cookies or site data from the lock icon.",
+          "imageWidth": 1280,
+          "imageHeight": 800
+        },
+        {
+          "image": "felaris-sidebar.png",
+          "imageAlt": "The Felaris sidebar listing a pinned tab, an active tab, an audio-playing tab with its speaker mute button, and a sleeping tab marked with a moon.",
+          "imageCaption": "Sidebar · pinned tabs, one-click tab mute, and a sleeping tab marked with a moon.",
+          "imageWidth": 520,
+          "imageHeight": 800
+        }
+      ]
+    },
+    "page": {
+      "icon": "felaris-icon.png",
+      "iconWidth": 256,
+      "iconHeight": 256,
+      "summary": "Felaris is a Rust browser for Windows that keeps out of your way. A collapsible sidebar holds your tabs and workspaces, a floating search bar opens over whatever you're reading, and background tabs sleep automatically so memory goes to the page in front of you. The installer is about 3 MB.",
+      "facts": [
+        {
+          "label": "Platform",
+          "value": "Windows 10 & 11"
+        },
+        {
+          "label": "Built with",
+          "value": "Rust · Microsoft WebView2"
+        },
+        {
+          "label": "Installer",
+          "value": "About 3 MB"
+        },
+        {
+          "label": "Install",
+          "value": "Per user, no admin prompt"
+        }
+      ],
+      "sections": [
+        {
+          "id": "everyday",
+          "title": "Everything within reach.",
+          "intro": "A sidebar instead of a tab strip, with the tools you reach for every day built in.",
+          "items": [
+            {
+              "title": "Zen-style sidebar",
+              "text": "Tabs, pins and workspaces sit in a 260px sidebar that folds into a 56px rail with Ctrl+Shift+B. Drag tabs or press Alt+Shift+Up/Down to reorder them, click the speaker icon to mute a noisy tab, or right-click for quick actions."
+            },
+            {
+              "title": "Workspaces",
+              "text": "Group tabs by task and switch with Alt+1 to 9. Workspaces organise tabs, not accounts, so your logins carry across them. Rename or delete workspaces from the picker without reloading live pages."
+            },
+            {
+              "title": "Private tabs",
+              "text": "Ctrl+Shift+N opens a tab in the Private workspace. Its pages use an InPrivate profile, and none of their tabs, history or top sites are saved."
+            },
+            {
+              "title": "Ad blocking built in",
+              "text": "uBlock Origin Lite is fetched on first launch, checked against a known hash, and loaded into every tab. Switch it off in Settings whenever you like."
+            },
+            {
+              "title": "Bookmarks & local suggestions",
+              "text": "Press Ctrl+D to bookmark a page. The address bar and floating search suggest open tabs, bookmarks, history and shortcuts with site favicons, without sending autocomplete queries to the network."
+            },
+            {
+              "title": "Session recovery",
+              "text": "Tabs, workspaces, pins and recently closed tabs are saved locally with a backup, so they come back after a restart."
+            }
+          ]
+        },
+        {
+          "id": "light",
+          "title": "Built to stay light.",
+          "intro": "Felaris keeps about twelve pages awake and lets the rest rest, without losing the work you care about.",
+          "items": [
+            {
+              "title": "Automatic tab sleeping",
+              "text": "Older background tabs unload once you have about twelve live pages. Pinned tabs, active downloads, playing media and pages with unsaved edits stay awake."
+            },
+            {
+              "title": "Sleep on demand & tab mute",
+              "text": "Press Ctrl+Shift+S to unload background tabs right away. Selecting a sleeping tab reloads it from its saved address, and muted tabs keep their mute state across sleep and restarts."
+            },
+            {
+              "title": "Floating sign-in windows",
+              "text": "Login and OAuth popups open in a floating window that shares your session, with a one-click option to turn it into a full tab."
+            },
+            {
+              "title": "Native downloads",
+              "text": "Downloads show progress and file actions, empty download-only tabs close themselves automatically, and Felaris warns you before closing while a transfer is still running."
+            },
+            {
+              "title": "Site controls & permissions",
+              "text": "Click the lock or warning icon in the address bar to inspect the site’s origin and HTTPS status or clear its cookies and stored data. Permission choices are remembered in your profile across visits."
+            },
+            {
+              "title": "Ready to be your default",
+              "text": "Felaris registers for web links and HTML files. Pick it from the sidebar menu and Windows keeps the final choice with you."
+            }
+          ]
+        },
+        {
+          "id": "shortcuts",
+          "title": "Keep your hands on the keys.",
+          "intro": "Shortcuts work even when a page has focus, so sites can’t swallow them.",
+          "table": {
+            "columns": [
+              "Shortcut",
+              "Action"
+            ],
+            "rows": [
+              [
+                "Ctrl + T",
+                "Open the floating new-tab search"
+              ],
+              [
+                "Ctrl + L",
+                "Focus the address and search bar"
+              ],
+              [
+                "Ctrl + W",
+                "Close the active tab"
+              ],
+              [
+                "Ctrl + Shift + T",
+                "Reopen the last closed tab"
+              ],
+              [
+                "Ctrl + Tab",
+                "Cycle tabs in the workspace"
+              ],
+              [
+                "Alt + 1 to 9",
+                "Switch workspace"
+              ],
+              [
+                "Alt + Shift + Up / Down",
+                "Reorder a focused tab within its group"
+              ],
+              [
+                "Ctrl + Shift + B",
+                "Expand or collapse the sidebar"
+              ],
+              [
+                "Ctrl + Shift + S",
+                "Put background tabs to sleep"
+              ],
+              [
+                "Ctrl + Shift + N",
+                "Open a private tab"
+              ],
+              [
+                "Ctrl + D",
+                "Bookmark the current page"
+              ],
+              [
+                "Ctrl + H",
+                "Open history and bookmarks"
+              ],
+              [
+                "Ctrl + J",
+                "Open downloads"
+              ],
+              [
+                "F11",
+                "Toggle full screen"
+              ]
+            ]
+          }
+        }
+      ],
+      "requirements": [
+        "Windows 10 or 11 (x64)",
+        "Microsoft Edge WebView2 Runtime, included with Windows",
+        "Installs for the current user, without an administrator prompt"
+      ],
+      "extras": [
+        {
+          "label": "Portable .exe",
+          "file": "felaris.exe"
+        }
+      ],
+      "note": "Sleeping tabs reload their saved address when you return to them, so unsaved form input does not survive sleep or a restart. Pin a tab to keep it awake."
+    }
+  },
+  {
     "name": "SpeakFlow",
     "repo": "SpeakFlow",
     "description": "Local and cloud speech-to-text for Windows.",
     "category": "Speech to text",
     "language": "Rust",
-    "version": "1.1.3",
-    "installer": "SpeakFlow_1.1.3_x64-setup.exe",
-    "tag": "1.1.3",
+    "version": "1.1.5",
+    "installer": "SpeakFlow_1.1.5_x64-setup.exe",
+    "tag": "1.1.5",
+    "release": {
+      "installer": "^SpeakFlow_[0-9.]+_x64-setup\\.exe$"
+    },
     "showcase": {
       "headline": "Speak naturally. Keep your flow.",
       "intro": "Hold a hotkey, speak, then release. SpeakFlow turns your words into text in the app you're already using, with local and cloud recognition options.",
@@ -46,6 +278,177 @@
           "imageHeight": 900
         }
       ]
+    },
+    "page": {
+      "icon": "speakflow-icon.png",
+      "iconWidth": 256,
+      "iconHeight": 256,
+      "summary": "Hold a hotkey, speak, release. SpeakFlow types your words straight into the app you're using. Run recognition on your own PC with downloadable local models, or connect a cloud engine. When you want more, add AI polish, translation and a voice assistant.",
+      "facts": [
+        {
+          "label": "Platform",
+          "value": "Windows 10 & 11 · x64"
+        },
+        {
+          "label": "Built with",
+          "value": "Tauri, React & Rust"
+        },
+        {
+          "label": "Installer",
+          "value": "About 20 MB"
+        },
+        {
+          "label": "Licence",
+          "value": "GPL-3.0, open source"
+        }
+      ],
+      "sections": [
+        {
+          "id": "start",
+          "title": "Three steps to your first dictation.",
+          "intro": "Basic local dictation works without any AI account.",
+          "items": [
+            {
+              "title": "Install",
+              "text": "Download the Windows installer. When you choose a local engine, its runtime downloads inside the app; no Python or build tools needed."
+            },
+            {
+              "title": "Choose an engine",
+              "text": "Open Settings, pick your microphone, then download a local model or add a cloud API key and region."
+            },
+            {
+              "title": "Speak",
+              "text": "Focus the app you want to type into, hold F2, speak, then release. Change the hotkey or switch to toggle recording in Settings."
+            }
+          ]
+        },
+        {
+          "id": "everyday",
+          "title": "More than dictation.",
+          "intro": "Everything beyond the hotkey is optional, and each piece can be switched on when you need it.",
+          "items": [
+            {
+              "title": "Dictation & translation",
+              "text": "Type into the active app with a hotkey, and optionally translate into your chosen language as you go."
+            },
+            {
+              "title": "Live subtitles",
+              "text": "Follow local recognition in a floating window, with committed text and a preview that revises as you speak."
+            },
+            {
+              "title": "AI polish",
+              "text": "Rewrite with your own instructions. Auto mode can keep your original wording when polishing isn’t needed."
+            },
+            {
+              "title": "Voice & selection assistants",
+              "text": "Ask questions, rewrite, translate, explain or search, optionally including the current app, selected text or a screenshot."
+            },
+            {
+              "title": "Personalisation",
+              "text": "Add hotwords, set rules per app, and let SpeakFlow learn from the spelling corrections you make after dictating."
+            },
+            {
+              "title": "Local history",
+              "text": "Opt in to search, export, delete or re-polish past text. Turn on audio saving to re-transcribe it later."
+            }
+          ]
+        },
+        {
+          "id": "engines",
+          "title": "Pick the engine that fits.",
+          "intro": "Local models run on Windows without WSL and use your GPU when available. Models download once and are cached.",
+          "table": {
+            "columns": [
+              "Engine",
+              "Runs",
+              "Good to know"
+            ],
+            "rows": [
+              [
+                "Qwen3-ASR 1.7B",
+                "Local · CUDA, Vulkan or CPU",
+                "About 2.19 GB · multilingual · the default"
+              ],
+              [
+                "Parakeet TDT 0.6B v2",
+                "Local · CUDA, Vulkan or CPU",
+                "About 730 MB · English · fastest"
+              ],
+              [
+                "Qwen3-ASR 0.6B",
+                "Local · CUDA, Vulkan or CPU",
+                "About 850 MB · multilingual"
+              ],
+              [
+                "Parakeet Unified EN 0.6B",
+                "Local · CUDA, Vulkan or CPU",
+                "About 731 MB · English"
+              ],
+              [
+                "Canary-Qwen 2.5B",
+                "Local · CUDA, Vulkan or CPU",
+                "About 2.80 GB · English, without punctuation"
+              ],
+              [
+                "Cohere Transcribe",
+                "Local · CUDA, Vulkan or CPU",
+                "About 2.41 GB · English and 13 other languages"
+              ],
+              [
+                "Confucius4-R2T2",
+                "Local · CUDA or CPU",
+                "About 2.48 GB · native streaming with language hints"
+              ],
+              [
+                "GLM-ASR",
+                "Cloud",
+                "Needs an API key and region"
+              ],
+              [
+                "Alibaba DashScope",
+                "Cloud",
+                "Needs an API key, region and model"
+              ]
+            ]
+          }
+        },
+        {
+          "id": "privacy",
+          "title": "You decide where your words go.",
+          "intro": "Nothing leaves your PC unless you turn on a feature that needs it.",
+          "table": {
+            "columns": [
+              "Setting",
+              "Where data goes"
+            ],
+            "rows": [
+              [
+                "Local recognition",
+                "Audio is processed on your PC. Model downloads need a network connection."
+              ],
+              [
+                "Cloud recognition",
+                "Audio is sent to the recognition provider you choose."
+              ],
+              [
+                "AI polish & assistants",
+                "Text and instructions go to the services you configure. Screenshot, selection and search context only when enabled."
+              ],
+              [
+                "History & audio saving",
+                "Both are off by default and stored locally when you turn them on."
+              ]
+            ]
+          }
+        }
+      ],
+      "requirements": [
+        "Windows 10 or 11 (x64)",
+        "A microphone",
+        "Local models download separately, from about 730 MB to 2.8 GB",
+        "Cloud engines and AI features need your own API key or a supported account"
+      ],
+      "note": "The installer is not code-signed yet, so Windows may show a SmartScreen prompt. Feature descriptions follow the project’s current documentation; check the release notes for what each version includes."
     }
   },
   {
@@ -54,9 +457,12 @@
     "description": "Your coding-agent usage stats, on your desktop.",
     "category": "Developer tools",
     "language": "Rust",
-    "version": "0.2.0",
-    "installer": "Cinder_0.2.0_x64-setup.exe",
-    "tag": "v0.2.0",
+    "version": "0.3.0",
+    "installer": "Cinder_0.3.0_x64-setup.exe",
+    "tag": "v0.3.0",
+    "release": {
+      "installer": "^Cinder_[0-9.]+_x64-setup\\.exe$"
+    },
     "showcase": {
       "headline": "See where your agent usage goes.",
       "intro": "Cinder brings your coding-agent activity into one desktop view. Explore requests, tokens, and available cost estimates from local logs instead of piecing them together across tools.",
@@ -70,6 +476,14 @@
       "imageCaption": "Actual Cinder interface · demo data, not personal usage.",
       "imageWidth": 1280,
       "imageHeight": 800,
+      "video": {
+        "file": "cinder-demo.mp4",
+        "poster": "cinder-poster.jpg",
+        "width": 1600,
+        "height": 1000,
+        "label": "Cinder demo with sample data: rate-limit warnings, cache and project breakdowns, plan versus API costs, filtering by agent, the all-time chart and rescanning data sources.",
+        "caption": "Cinder v0.4.0 with sample data · 27-second demo."
+      },
       "short": "Coding-agent usage · Windows",
       "tone": "cobalt",
       "scenes": [
@@ -95,6 +509,133 @@
           "imageHeight": 900
         }
       ]
+    },
+    "page": {
+      "icon": "cinder-icon.png",
+      "iconWidth": 256,
+      "iconHeight": 256,
+      "summary": "Cinder reads the session logs your coding agents already keep on this machine and turns them into one desktop dashboard: requests, tokens, estimated cost and quota pacing across every agent you use. Logs are parsed locally, with no network involved.",
+      "facts": [
+        {
+          "label": "Platform",
+          "value": "Windows · x64"
+        },
+        {
+          "label": "Built with",
+          "value": "Tauri 2 & Rust"
+        },
+        {
+          "label": "Your data",
+          "value": "Parsed locally, never uploaded"
+        },
+        {
+          "label": "Updates",
+          "value": "In-app, from GitHub Releases"
+        }
+      ],
+      "sections": [
+        {
+          "id": "dashboard",
+          "title": "One dashboard for every agent.",
+          "intro": "Click to narrow, compare against the last period, and export exactly what you’re looking at.",
+          "items": [
+            {
+              "title": "Filters that stack",
+              "text": "Click an agent, then a model, and every panel narrows at once. The breadcrumb undoes each step with one click."
+            },
+            {
+              "title": "A chart with context",
+              "text": "A dashed line shows the previous period of the same length. Hide an agent from its legend chip; long ranges bucket into weeks."
+            },
+            {
+              "title": "Breakdowns & CSV",
+              "text": "Switch between Model, Day, Agent and Cache views. Every row is a filter, and CSV exports the dataset you’ve tailored."
+            },
+            {
+              "title": "Limits view",
+              "text": "Burn-rate pacing, quota health badges from On Pace to Exhaustion Risk, pace markers and a depletion estimate."
+            },
+            {
+              "title": "Live updates",
+              "text": "Cinder watches your log folders and refreshes the open window shortly after agents stop writing, at most once a minute."
+            },
+            {
+              "title": "Keyboard first",
+              "text": "1 to 4 switch between cost, tokens, requests and limits. R refreshes, S opens Settings and Esc closes a dialog."
+            }
+          ]
+        },
+        {
+          "id": "agents",
+          "title": "Works with the agents you use.",
+          "intro": "Agents that don’t log tokens or cost still appear: switch to the Requests metric to see them.",
+          "table": {
+            "columns": [
+              "Agent",
+              "What Cinder shows"
+            ],
+            "rows": [
+              [
+                "Pi",
+                "Requests, tokens, cost, tool calls and models"
+              ],
+              [
+                "Codex",
+                "Requests, tokens, tools and models; cost estimated"
+              ],
+              [
+                "Claude Code",
+                "Requests, tokens, tools and models; cost estimated"
+              ],
+              [
+                "OpenCode",
+                "Sessions, tokens, cost and tool calls"
+              ],
+              [
+                "Antigravity",
+                "Requests, tools and sessions; API cost estimated"
+              ],
+              [
+                "DSH",
+                "Requests, tokens, tools, sessions and models; cost estimated"
+              ],
+              [
+                "LM Studio",
+                "Requests, sessions and models"
+              ]
+            ]
+          }
+        },
+        {
+          "id": "settings",
+          "title": "Set it once. Keep it current.",
+          "intro": "Open Settings from the header, or press S.",
+          "items": [
+            {
+              "title": "Update badge",
+              "text": "When a newer release is published, an update badge appears in the header and on the Settings button."
+            },
+            {
+              "title": "Update in place",
+              "text": "Update Now downloads the installer with live progress, updates Cinder in place and restarts it on the new version."
+            },
+            {
+              "title": "Your defaults",
+              "text": "Choose the metric and date range Cinder opens with: Today, 7, 30 or 90 days."
+            },
+            {
+              "title": "Data sources",
+              "text": "See every log folder and database Cinder reads, or trigger a full rescan."
+            }
+          ]
+        }
+      ],
+      "requirements": [
+        "Windows (x64)",
+        "At least one supported coding agent that writes logs on this PC",
+        "Daily ranges use UTC dates"
+      ],
+      "note": "Costs are estimates when an agent doesn’t log them, and figures marked ≥ exclude some unpriced tokens."
     }
   },
   {
@@ -103,9 +644,12 @@
     "description": "Cinema, anime, books, manga and manhwa in one place.",
     "category": "Desktop app",
     "language": "Tauri",
-    "version": "0.3.2",
+    "version": "0.5.0",
     "installer": "Everglow-Desktop-Setup.exe",
-    "tag": "v0.3.2",
+    "tag": "v0.5.0",
+    "release": {
+      "installer": "^Everglow-Desktop-Setup\\.exe$"
+    },
     "showcase": {
       "headline": "Something to watch. Something to read.",
       "intro": "Everglow brings cinema, anime, and manga/manhwa together. Find something to watch tonight, catch up on what's airing, or pick your next read.",
@@ -144,6 +688,92 @@
           "imageHeight": 490
         }
       ]
+    },
+    "page": {
+      "icon": "everglow-icon.png",
+      "iconWidth": 256,
+      "iconHeight": 256,
+      "summary": "Everglow brings films, series, anime, books, manga and manhwa into one place. Find something to watch tonight, see what's airing, or pick up your next read, all in a desktop window of its own.",
+      "facts": [
+        {
+          "label": "Platform",
+          "value": "Windows · x64"
+        },
+        {
+          "label": "Built with",
+          "value": "Tauri 2 & Rust"
+        },
+        {
+          "label": "Inside",
+          "value": "Cinema · Anime · Reading"
+        },
+        {
+          "label": "Updates",
+          "value": "In-app, never mid-film"
+        }
+      ],
+      "sections": [
+        {
+          "id": "inside",
+          "title": "Watch it. Read it. All here.",
+          "intro": "One app for tonight’s film, this season’s anime and the next chapter.",
+          "items": [
+            {
+              "title": "Cinema",
+              "text": "Films and series, with Trending Now rows and a local Top 10 to help you pick something for tonight."
+            },
+            {
+              "title": "Anime",
+              "text": "What’s airing and trending, with ratings, genres and a Watch Now button right up front."
+            },
+            {
+              "title": "MangaCelestia",
+              "text": "Manga, manhwa and manhua with type filters and a Hot Updates row for what’s new."
+            },
+            {
+              "title": "Books",
+              "text": "A separate books section for when you’d rather settle in with something longer."
+            }
+          ]
+        },
+        {
+          "id": "desktop",
+          "title": "Made for the desktop.",
+          "intro": "A quiet window that gets out of the way of what you’re watching.",
+          "items": [
+            {
+              "title": "A window that hides",
+              "text": "The title bar tucks away. Move to the top edge to reveal it, or press Ctrl+Shift+M for the menu. Prefer it pinned? There’s a setting."
+            },
+            {
+              "title": "Ads and trackers blocked",
+              "text": "Layered ad and tracker blocking is on from the start. Pause or resume it from the Everglow menu."
+            },
+            {
+              "title": "Updates that wait",
+              "text": "Updates download quietly in the background and only install when you choose Restart to update. Playback is never interrupted."
+            },
+            {
+              "title": "Remembers your window",
+              "text": "Size and position come back next time, fitted to your screen even if a monitor was unplugged."
+            },
+            {
+              "title": "Full screen",
+              "text": "Press F11 for full screen. The title bar stays hidden during video and full screen."
+            },
+            {
+              "title": "Easy recovery",
+              "text": "If the connection drops while starting, a recovery screen offers Retry instead of a blank window."
+            }
+          ]
+        }
+      ],
+      "requirements": [
+        "Windows (x64)",
+        "An internet connection; the catalogue loads live",
+        "Microsoft Edge WebView2 Runtime, included with Windows"
+      ],
+      "note": "Blocking is strong but not identical to a privacy-focused browser, and some streaming sites may still behave differently. The Windows installer is not code-signed, so Windows may show a SmartScreen prompt."
     }
   },
   {

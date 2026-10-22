@@ -2,6 +2,30 @@
 
 These are real application interfaces, not AI-generated app screens. Every PNG embeds its origin metadata. Demo data and simulated operations are identified in the site captions. Captures prove presentation only, not microphone access, cloud recognition, updates, playback or catalog availability.
 
+## Felaris
+
+Source: https://github.com/khentmoba/Felaris/tree/e0c4d06b03bed3bdaf5f549efdca16c8fd0650fc/src (v0.3.1)
+
+- `felaris-home.png`: 1280 × 800 capture of the actual Felaris v0.3.1 interface (`src/ui.html` and `src/start_page.html`) loaded in the UI test harness with sample tabs, showing the standalone vector logo, Brave Search box, eight site shortcuts, and sidebar controls. No personal browsing data.
+- `felaris-new-tab.png`: 1280 × 800 capture of the floating new-tab search (`src/new_tab.html`) open over Felaris Home, showing matching open tabs across workspaces and recent history with site favicons.
+- `felaris-site-controls.png`: 1280 × 800 capture of the sidebar's Site controls panel (`src/ui.html`) opened from the address bar lock icon for a sample HTTPS origin, showing connection details, permission defaults, and the cookie/site-data clearing action.
+- `felaris-sidebar.png`: 520 × 800 crop of the Felaris v0.3.1 sidebar showing a pinned tab, an active tab, an audio-playing tab with its one-click speaker mute button, a sleeping tab marked with a moon, Downloads, and the workspace switcher.
+
+- `felaris-demo.mp4`, `felaris-poster.jpg`: 25.8-second 1600 × 1000 Remotion video (source in the Felaris repository under `promo-video-v2/`, not committed) built from screen captures of an isolated Felaris v0.3.1 instance with its own profile. Pages shown: Felaris Home, the public Chrome for Developers site, and a local tone test page. No personal browsing data. The music is synthesized in code for this video.
+
+These are captures of the unmodified Felaris v0.3.1 HTML/CSS/JS surfaces against UI fixtures. They show presentation, not native WebView2 tab sleeping or memory behaviour.
+
+## App icons
+
+Each app page uses the app's official icon, resized to 256 × 256 with no other changes:
+
+- `felaris-icon.png`: https://github.com/khentmoba/Felaris/blob/e0c4d06b03bed3bdaf5f549efdca16c8fd0650fc/assets/felaris-icon.png (the vector mark shipped in v0.3.1)
+- `speakflow-icon.png`: https://github.com/khentmoba/SpeakFlow/blob/d98869cbe8b04154c166f367a5c4089934f9f814/src-tauri/icons/128x128@2x.png
+- `cinder-icon.png`: https://github.com/khentmoba/Cinder/blob/7404e34b28cc231f0807dfac7f5762484f21fbfa/src-tauri/icons/128x128@2x.png
+- `everglow-icon.png`: https://github.com/khentmoba/Everglow-Desktop/blob/2e58246013e3bac292e9bbcde8f75e7c6a7ec953/src-tauri/icons/icon.png
+
+App page copy comes from each repository's README and claims nothing those documents don't state.
+
 ## SpeakFlow
 
 Source: https://github.com/khentmoba/SpeakFlow/tree/63d3dc3a218d5e275b323130bed0cd84b366fd4d
@@ -17,6 +41,7 @@ The feature captures use the official Tauri IPC mocks and a local event adapter 
 
 Source: actual frontend at `C:/APPLICATIONS/Cinder/src`, commit `aa2f887b25dd368e04ab7b31595342ae24bb8389` (https://github.com/khentmoba/Cinder/tree/aa2f887b25dd368e04ab7b31595342ae24bb8389/src).
 
+- `cinder-demo.mp4`, `cinder-poster.jpg`: 27-second 1600 × 1000 Remotion video (source in the Cinder repository under `promo-video-v2/`, not committed) built from captures of the unmodified Cinder v0.4.0 frontend (the `v0.4.0` tag) in headless Chrome, with the Tauri calls answered by a mock that returns synthetic usage. Every usage number is sample data and is labelled DEMO DATA. The music is synthesized in code for this video.
 - `cinder.png`: original 1280 × 800 dashboard capture with synthetic usage rows.
 - `cinder-agents.png`: actual Pi agent filter selected, with synthetic session totals.
 - `cinder-range.png`: actual seven-day range and Cost metric selected, with synthetic data.

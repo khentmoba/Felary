@@ -1,0 +1,64 @@
+{
+  "Cinder": {
+    "tag": "v0.4.0",
+    "version": "0.4.0",
+    "installer": "Cinder_0.4.0_x64-setup.exe",
+    "extras": [],
+    "released": "2026-10-21",
+    "notes": [
+      "Correct model logos for GLM, Gemini and proxy routes.",
+      "Add cache analytics, quota pacing, and expanded breakdown views.",
+      "Quota centre, quota alerts, project rollup, billing modes and FFF-speed scanning."
+    ]
+  },
+  "Everglow-Desktop": {
+    "tag": "v0.5.0",
+    "version": "0.5.0",
+    "installer": "Everglow-Desktop-Setup.exe",
+    "extras": [],
+    "released": "2026-10-21",
+    "notes": [
+      "Fixed dragging the desktop window from the title bar.",
+      "Added settings to pin the title bar and remember window size and position.",
+      "Added a cache-clearing option that preserves sign-in data.",
+      "Added a startup recovery screen with a Retry button when the site cannot load.",
+      "Opening the app again now focuses the existing window.",
+      "Desktop updates now use menu controls for downloading and restarting, without interrupting playback with dialogs."
+    ]
+  },
+  "Felaris": {
+    "tag": "v0.3.1",
+    "version": "0.3.1",
+    "installer": "felaris-setup.exe",
+    "extras": [
+      {
+        "label": "Portable .exe",
+        "file": "felaris.exe"
+      }
+    ],
+    "released": "2026-10-21",
+    "notes": [
+      "Reorder tabs by dragging or using Alt+Shift+Up/Down keyboard shortcuts.",
+      "Mute and unmute tabs directly from the speaker icon in the sidebar.",
+      "Inspect HTTPS security and clear cookies or site data from the address bar lock icon.",
+      "Remember site permission choices in your profile across visits.",
+      "Display site favicons in sidebar address bar suggestions.",
+      "Automatically dismiss empty tabs opened only for file downloads.",
+      "Regenerate high-resolution application and taskbar icons for Windows."
+    ]
+  },
+  "SpeakFlow": {
+    "tag": "1.1.6",
+    "version": "1.1.6",
+    "installer": "SpeakFlow_1.1.6_x64-setup.exe",
+    "extras": [],
+    "released": "2026-10-21",
+    "notes": [
+      "Restyled the floating subtitle pill in the dark theme with an electric cyan glow.",
+      "Added a double-tap hotkey lock so you can keep dictating without holding the key.",
+      "Added Escape to cancel a recording without transcribing or pasting it.",
+      "Added Ctrl+Alt+V to paste your last dictation again.",
+      "Added per-site app rules, so browser rules can match github.com, x.com and other sites instead of only the browser program."
+    ]
+  }
+}

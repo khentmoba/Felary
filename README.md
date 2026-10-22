@@ -22,6 +22,12 @@ npm run build
 
 The production site is written to `dist/`. Serve that folder, not the repository root. No server, database, or API key is needed in production. A small local JavaScript module enhances the app spotlight with keyboard-accessible tabs. Without JavaScript, the introduction, app stories, pictures, source links and downloads remain available through native anchor links.
 
+## App pages
+
+Each featured app has its own site at `/apps/<name>/`: `/apps/felaris/`, `/apps/speakflow/`, `/apps/cinder/` and `/apps/everglow/`. A page has a hero with the app icon, name, summary and download button; a full-width screenshot and key facts; the same scroll-driven feature tour as the homepage; detail sections (feature grids, or tables such as SpeakFlow's engines and Felaris' shortcuts); a download block with requirements, extra assets and release links; and links to the other apps. The homepage spotlight, story titles and download rows link to these pages.
+
+Pages are generated at build time from each project's `page` object in `src/projects.json`: `summary`, `icon` with `iconWidth`/`iconHeight`, `facts` (`label`/`value`), `sections` (each with a unique `id`, a `title`, an optional `intro`, and either `items` of `title`/`text` or a `table` of `columns`/`rows`), `requirements`, optional `extras` (other `.exe` assets from the same release) and an optional `note`. The URL comes from the app name. A `page` requires a `showcase`. The build validates the shape and checks that the icon exists.
+
 ## Scroll-driven exhibition
 
 On supporting browsers, app screenshots rise and scale into their plates while thin silver progress lines and readable feature emphasis follow scrolling in both directions. These effects work on narrow previews and phones too. On desktop viewports at least 900px wide and 700px tall, screenshots additionally stay in view while their introductions and features scroll past. A small IntersectionObserver controller switches feature screenshots in the existing JavaScript module; no runtime dependency or paid service is added.
@@ -55,7 +61,14 @@ Cloudflare has not been connected or deployed by this repository setup. No paid 
 
 A project needs `name`, `repo` (repository name under khentmoba), `description`, `category` and `language`. For Windows downloads also supply `version`, `tag` and the exact GitHub release asset filename as `installer`. Omit all three download fields for a source-only project. To add scroll-linked feature images, supply `showcase.scenes` in the same order and count as `showcase.features`; each scene uses `image`, `imageAlt`, `imageCaption`, `imageWidth` and `imageHeight`. The build validates the mapping, safe filenames, dimensions and asset presence.
 
-Downloads deliberately link to explicit versions. When publishing a newer release, update its tag, version and asset filename together, then rebuild. The separate latest-release links always lead to GitHub's newest release. Site builds do not automatically import new repositories or releases, and require no GitHub API requests.
+## Automatic release updates
+
+The site picks up new app releases by itself. Each featured app in `src/projects.json` has a `release.installer` pattern (for example `^SpeakFlow_[0-9.]+_x64-setup\.exe$`). At build time, `scripts/releases.mjs` asks GitHub for each repository's latest release, picks the asset that matches the pattern, and updates the version, download link, release date and release notes. Each app page gets a "What's new" section, and the homepage marks downloads released in the last 30 days as New.
+
+- **When:** `.github/workflows/deploy.yml` runs on every push to `main`, every three hours, on demand (`workflow_dispatch`), and when an app repository sends a `repository_dispatch` event of type `app-released`. A scheduled run compares its `dist/releases.json` with the live copy and only deploys when a release changed.
+- **Right after a release:** an app's release workflow can trigger a deploy immediately with `gh api repos/khentmoba/Felary/dispatches -f event_type=app-released`. That needs a token allowed to dispatch to this repository.
+- **Fallback:** if GitHub can't be reached, or a release has no asset matching the pattern, that app keeps its entry in `src/releases.json`, the saved snapshot. Refresh the snapshot with `npm run releases`. Set `FELARY_RELEASES=offline` to build from the snapshot alone; the tests do this.
+- **Not automatic:** screenshots, feature copy and page sections. Update them by hand when an app's interface or features change.
 
 Project descriptions and release filenames were checked against public GitHub metadata during setup. LUNA EXPRESS and SLSS have no supplied description; their entries use neutral source links rather than invented claims. SpeakFlow demonstrates its actual listening state, cloud-engine selector and rewritten-result comparison using a mocked backend, not real audio or cloud requests. Cinder shows actual agent filtering, date-range usage and its update dialog with clearly labeled synthetic data. Everglow introduces cinema, anime, books, manga and manhwa using only public-section demo/guest UI. The reading preview shows MangaCelestia, not the separate books section. The former private sign-in image is removed from the current build; Git history has not been rewritten. Image sources, pinned commits, font origins and licenses are recorded in `src/assets/SOURCES.md`. No testimonials, employment history or contact details have been fabricated.
 

@@ -45,6 +45,11 @@ export function initShowcase(root) {
   root.dataset.enhanced = '';
 }
 
+export function isRecent(date, now, days=30) {
+  const age=now-Date.parse(date+'T00:00:00Z');
+  return age>=0 && age<days*864e5;
+}
+
 export function featureFrameIndex(featureTops, readingLine, ready=true) {
   if (!ready) return 0;
   let frame=0;
@@ -136,9 +141,58 @@ export function initFeatureStory(root) {
   configure();
 }
 
+const icons={
+  pause:'<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 5v14M15 5v14"/></svg>',
+  play:'<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>',
+  muted:'<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9zm12 0 5 6m0-6-5 6"/></svg>',
+  sound:'<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9zm12-1a5 5 0 0 1 0 8m2.5-10.5a8.5 8.5 0 0 1 0 13"/></svg>'
+};
+
+// Muted, looping demo videos that only play while visible, never against a reduced-motion preference,
+// and stop for good once the visitor pauses them.
+export function initDemoVideo(video, videos, still) {
+  const frame=video.parentElement;
+  let held=still;
+  video.controls=false;
+  const button=(cls)=>{
+    const el=document.createElement('button');
+    el.type='button';
+    el.className='video-button '+cls;
+    return el;
+  };
+  const toggle=button('video-toggle');
+  const sound=button('video-sound');
+  const controls=document.createElement('div');
+  controls.className='video-controls';
+  controls.append(toggle,sound);
+  frame.append(controls);
+  const paint=()=>{
+    toggle.innerHTML=video.paused?icons.play:icons.pause;
+    toggle.setAttribute('aria-label',(video.paused?'Play':'Pause')+' the demo video');
+    sound.innerHTML=video.muted?icons.muted:icons.sound;
+    sound.setAttribute('aria-label',video.muted?'Turn sound on':'Turn sound off');
+    sound.setAttribute('aria-pressed',String(!video.muted));
+  };
+  let visible=false;
+  const settle=()=>{ if (visible && !held) video.play().catch(()=>{}); else video.pause(); };
+  toggle.addEventListener('click',()=>{ held=!video.paused; if (!held) video.play().catch(()=>{}); else video.pause(); });
+  sound.addEventListener('click',()=>{
+    video.muted=!video.muted;
+    if (!video.muted) {
+      videos.forEach(other=>{ if (other!==video) other.muted=true; });
+      held=false;
+      video.play().catch(()=>{});
+    }
+  });
+  ['play','pause','volumechange'].forEach(type=>video.addEventListener(type,paint));
+  if (still) { video.removeAttribute('autoplay'); video.pause(); }
+  if (typeof IntersectionObserver !== 'undefined') new IntersectionObserver(entries=>{ visible=entries[0].isIntersecting; settle(); },{threshold:.35}).observe(frame);
+  paint();
+}
+
 if (typeof document !== 'undefined') {
   document.querySelectorAll('.spotlight').forEach(initShowcase);
-  document.querySelectorAll('.spotlight-media img, .story-image img, .feature-inline img').forEach(img => {
+  document.querySelectorAll('.spotlight-media img, .story-image img, .feature-inline img, .hero-image img').forEach(img => {
     const fallback = () => {
       const message = document.createElement('p');
       message.className = 'image-error';
@@ -149,4 +203,15 @@ if (typeof document !== 'undefined') {
     if (img.complete && !img.naturalWidth) fallback();
   });
   document.querySelectorAll('.app-story').forEach(initFeatureStory);
+  const videos=[...document.querySelectorAll('video.demo-video')];
+  const still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  videos.forEach(video=>initDemoVideo(video,videos,still));
+  // Release dates are baked in at build time; "New" depends on today, so it is decided here.
+  document.querySelectorAll('.download time[data-released]').forEach(time => {
+    if (!isRecent(time.dateTime, Date.now())) return;
+    const tag = document.createElement('span');
+    tag.className = 'fresh';
+    tag.textContent = 'New';
+    time.closest('.download').querySelector('h3').append(tag);
+  });
 }

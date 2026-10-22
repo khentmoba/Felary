@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
+    "releases": "node scripts/releases.mjs",
     "dev": "node scripts/serve.mjs",
     "test": "node --test",
     "deploy": "wrangler pages deploy dist --project-name felary --branch main",
