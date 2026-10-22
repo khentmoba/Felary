@@ -476,6 +476,14 @@
       "imageCaption": "Actual Cinder interface · demo data, not personal usage.",
       "imageWidth": 1280,
       "imageHeight": 800,
+      "video": {
+        "file": "cinder-demo.mp4",
+        "poster": "cinder-poster.jpg",
+        "width": 1600,
+        "height": 1000,
+        "label": "Cinder demo with sample data: rate-limit warnings, cache and project breakdowns, plan versus API costs, filtering by agent, the all-time chart and rescanning data sources.",
+        "caption": "Cinder v0.4.0 with sample data · 27-second demo."
+      },
       "short": "Coding-agent usage · Windows",
       "tone": "cobalt",
       "scenes": [

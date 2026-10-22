@@ -41,6 +41,7 @@ The feature captures use the official Tauri IPC mocks and a local event adapter 
 
 Source: actual frontend at `C:/APPLICATIONS/Cinder/src`, commit `aa2f887b25dd368e04ab7b31595342ae24bb8389` (https://github.com/khentmoba/Cinder/tree/aa2f887b25dd368e04ab7b31595342ae24bb8389/src).
 
+- `cinder-demo.mp4`, `cinder-poster.jpg`: 27-second 1600 × 1000 Remotion video (source in the Cinder repository under `promo-video-v2/`, not committed) built from captures of the unmodified Cinder v0.4.0 frontend (the `v0.4.0` tag) in headless Chrome, with the Tauri calls answered by a mock that returns synthetic usage. Every usage number is sample data and is labelled DEMO DATA. The music is synthesized in code for this video.
 - `cinder.png`: original 1280 × 800 dashboard capture with synthetic usage rows.
 - `cinder-agents.png`: actual Pi agent filter selected, with synthetic session totals.
 - `cinder-range.png`: actual seven-day range and Cost metric selected, with synthetic data.
