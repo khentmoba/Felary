@@ -1,7 +1,7 @@
-import { readFile, mkdir, writeFile, copyFile, cp, rm } from 'node:fs/promises';
+import { access, readFile, mkdir, writeFile, copyFile, cp, rm } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
-import { resolve } from 'node:path';
-import { fetchReleases, applyReleases } from './releases.mjs';
+import { basename, resolve } from 'node:path';
+import { fetchReleases, applyReleases, isSafeName } from './releases.mjs';
 
 export const escapeHtml = (value) => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const arrow = '<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 19 19 5M5 5h14v14"/></svg>';
@@ -17,6 +17,11 @@ const reservedIds = ['main','overview','features','whats-new','download','more-a
 const day = new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'});
 const released = p => p.released ? `<time datetime="${p.released}" data-released>${day.format(new Date(p.released+'T00:00:00Z'))}</time>` : '';
 const validPattern = v => { try { return text(v) && !!new RegExp(v); } catch { return false; } };
+const validDate = v => {
+  if (typeof v !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(v)) return false;
+  const d = new Date(v + 'T00:00:00Z');
+  return !Number.isNaN(d.getTime()) && d.toISOString().slice(0, 10) === v;
+};
 
 function validatePage(p) {
   const g=p.page;
@@ -36,7 +41,7 @@ function validatePage(p) {
     const table=!!t && Array.isArray(t.columns) && t.columns.length > 0 && t.columns.every(text) && Array.isArray(t.rows) && t.rows.length > 0 && t.rows.every(r=>Array.isArray(r) && r.length===t.columns.length && r.every(text));
     if (items === table) throw new Error('Each section needs either items or a complete table.');
   }
-  if (g.extras !== undefined && (!p.installer || !Array.isArray(g.extras) || !g.extras.every(e=>e && text(e.label) && /^[a-zA-Z0-9_.-]+[.]exe$/.test(e.file)))) throw new Error('Extra downloads need a release, a label and an .exe asset.');
+  if (g.extras !== undefined && (!p.installer || !Array.isArray(g.extras) || !g.extras.every(e=>e && text(e.label) && isSafeName(e.file) && e.file.endsWith('.exe') && (e.pattern === undefined || validPattern(e.pattern))))) throw new Error('Extra downloads need a release, a label, an .exe asset and a valid pattern.');
   if (g.note !== undefined && !text(g.note)) throw new Error('Page notes cannot be empty.');
 }
 
@@ -48,11 +53,11 @@ export function validateProjects(projects) {
     for (const key of ['name', 'repo', 'description', 'category', 'language']) {
       if (typeof p[key] !== 'string' || !p[key].trim()) throw new Error('Missing project field: ' + key);
     }
-    if (!/^[a-zA-Z0-9_.-]+$/.test(p.repo) || names.has(slug(p))) throw new Error('Invalid or duplicate repository.');
+    if (!isSafeName(p.repo) || names.has(slug(p))) throw new Error('Invalid or duplicate repository.');
     names.add(slug(p));
-    if ([p.installer,p.tag,p.version].some(v=>v !== undefined) && (![p.tag,p.version,p.installer].every(v=>typeof v === 'string' && v.trim()) || !p.installer.endsWith('.exe'))) throw new Error('Downloads need a tag, version and .exe asset.');
+    if ([p.installer,p.tag,p.version].some(v=>v !== undefined) && (!isSafeName(p.tag) || !text(p.version) || !isSafeName(p.installer) || !p.installer.endsWith('.exe'))) throw new Error('Downloads need a tag, version and .exe asset.');
     if (p.release !== undefined && (!p.installer || !validPattern(p.release.installer))) throw new Error('Release rules need a download and a valid installer pattern.');
-    if (p.released !== undefined && !/^\d{4}-\d{2}-\d{2}$/.test(p.released)) throw new Error('Release dates must be YYYY-MM-DD.');
+    if (p.released !== undefined && !validDate(p.released)) throw new Error('Release dates must be YYYY-MM-DD.');
     if (p.notes !== undefined && (!Array.isArray(p.notes) || !p.notes.every(text))) throw new Error('Release notes must be text.');
     if (p.showcase) {
       const s=p.showcase;
@@ -82,11 +87,18 @@ export function validateProjects(projects) {
   }
   return projects;
 }
-const imageAsset = (s,eager=false) => `<img src="/assets/${s.image}" alt="${escapeHtml(s.imageAlt)}" width="${s.imageWidth}" height="${s.imageHeight}" loading="${eager?'eager':'lazy'}" decoding="async"${eager?' fetchpriority="high"':''}>`;
+const webpName = file => file.replace(/\.png$/, '.webp');
+const picture = (file, imgTag) => file.endsWith('.png') ? `<picture><source srcset="/assets/${webpName(file)}" type="image/webp">${imgTag}</picture>` : imgTag;
+const imageAsset = (s,eager=false) => picture(s.image, `<img src="/assets/${s.image}" alt="${escapeHtml(s.imageAlt)}" width="${s.imageWidth}" height="${s.imageHeight}" loading="${eager?'eager':'lazy'}" decoding="async"${eager?' fetchpriority="high"':''}>`);
 const image = (p,eager=false) => imageAsset(p.showcase,eager);
 // Demo videos play muted and looped like a moving plate; showcase.js adds pause and sound buttons and drops the native controls.
-const demoVideo = v => `<div class="video-frame"><video class="demo-video" src="/assets/${v.file}" poster="/assets/${v.poster}" width="${v.width}" height="${v.height}" aria-label="${escapeHtml(v.label)}" autoplay muted loop playsinline controls preload="metadata"><a href="/assets/${v.file}">Watch the demo video</a></video></div>`;
-const plate = (p,eager=false) => p.showcase.video ? demoVideo(p.showcase.video) : image(p,eager);
+const demoVideo = (v,eager=true) => `<div class="video-frame"><video class="demo-video" src="/assets/${v.file}" poster="/assets/${v.poster}" width="${v.width}" height="${v.height}" aria-label="${escapeHtml(v.label)}"${eager?' autoplay':''} muted loop playsinline controls preload="${eager?'metadata':'none'}"><a href="/assets/${v.file}">Watch the demo video</a></video></div>`;
+const plate = (p,eager=false) => p.showcase.video ? demoVideo(p.showcase.video,eager) : image(p,eager);
+const preloadMedia = p => p?.showcase?.video
+  ? `<link rel="preload" href="/assets/${p.showcase.video.poster}" as="image" fetchpriority="high">`
+  : p?.showcase?.image
+    ? `<link rel="preload" href="/assets/${webpName(p.showcase.image)}" as="image" type="image/webp" fetchpriority="high">`
+    : '';
 function renderStory(p,onPage=false) {
   const site=p.page && !onPage;
   const s=p.showcase;
@@ -99,6 +111,7 @@ export function renderProjects(projects) {
   validateProjects(projects);
   const featured=projects.filter(p=>p.showcase);
   return {
+    headPreloads: preloadMedia(featured[0]),
     tabs: featured.map((p,i)=>`<a class="app-choice" id="choice-${slug(p)}" href="#app-${slug(p)}" data-panel="spotlight-${slug(p)}"><strong>${escapeHtml(p.name)}</strong><small>${escapeHtml(p.showcase.short)}</small>${arrow}</a>`).join('\n'),
     panels: featured.map((p,i)=>`<div class="spotlight-panel ${p.showcase.tone}${p.showcase.artwork?' artwork':''}" id="spotlight-${slug(p)}"${i?' hidden':''}>${p.page && !p.showcase.video?`<a class="spotlight-media" href="${pageHref(p)}" aria-label="Visit the ${escapeHtml(p.name)} site">${image(p,i===0)}</a>`:`<div class="spotlight-media">${plate(p,i===0)}</div>`}<div class="spotlight-caption"><h2>${escapeHtml(p.showcase.headline)}</h2><a href="${p.page?pageHref(p):'#app-'+slug(p)}">${p.page?'Visit the '+escapeHtml(p.name)+' site':'Explore '+escapeHtml(p.name)} ${arrow}</a></div><p class="media-note">${escapeHtml(p.showcase.video?.caption || p.showcase.imageCaption)}</p></div>`).join('\n'),
     stories: featured.map(p=>renderStory(p)).join('\n'),
@@ -107,7 +120,7 @@ export function renderProjects(projects) {
     downloads: projects.filter(p=>p.installer).map(p=>`<article class="download"><div class="download-name">${p.page?appIcon(p.page,'download-row-icon'):''}<div><h3>${p.page?`<a href="${pageHref(p)}">${escapeHtml(p.name)}</a>`:escapeHtml(p.name)}</h3><p>v${escapeHtml(p.version)}${p.released?' · Released '+released(p):''} · Windows x64</p></div></div><div class="download-actions"><a class="button download-button" href="${download(p)}" aria-label="Download ${escapeHtml(p.name)} ${escapeHtml(p.version)} installer">Download .exe ${down}</a><a class="release-link" href="${p.page&&p.notes?.length?pageHref(p)+'#whats-new':base(p)+'/releases/latest'}" aria-label="${escapeHtml(p.name)} release notes">${p.page&&p.notes?.length?'What’s new':'Release notes'} ${arrow}</a></div></article>`).join('\n')
   };
 }
-const appIcon = (g,cls,eager=false) => `<img class="${cls}" src="/assets/${g.icon}" alt="" width="${g.iconWidth}" height="${g.iconHeight}" loading="${eager?'eager':'lazy'}" decoding="async">`;
+const appIcon = (g,cls,eager=false) => picture(g.icon, `<img class="${cls}" src="/assets/${g.icon}" alt="" width="${g.iconWidth}" height="${g.iconHeight}" loading="${eager?'eager':'lazy'}" decoding="async">`);
 function renderSection(s) {
   const body=s.items
     ? `<div class="detail-grid">${s.items.map(item=>`<article class="detail"><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.text)}</p></article>`).join('')}</div>`
@@ -137,7 +150,9 @@ export function renderAppPage(p, projects) {
   <meta property="og:type" content="website">
   <title>${escapeHtml(title)} · Felary</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="preload" href="/assets/fonts/barlow-condensed-600.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="/assets/fonts/barlow-condensed-600.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/manrope-400.woff2" as="font" type="font/woff2" crossorigin>
+  ${preloadMedia(p)}
   <link rel="stylesheet" href="/style.css">
   <script type="module" src="/showcase.js"></script>
 </head>
@@ -181,19 +196,34 @@ export function renderAppPage(p, projects) {
 `;
 }
 
-export async function build({ live = process.env.FELARY_RELEASES !== 'offline' } = {}) {
+export async function build({ live = process.env.FELARY_RELEASES !== 'offline', strict = process.env.FELARY_RELEASES === 'strict' } = {}) {
   const source = JSON.parse(await readFile('src/projects.json','utf8'));
   const saved = JSON.parse(await readFile('src/releases.json','utf8').catch(()=>'{}'));
-  const fresh = live ? await fetchReleases(source,{ token: process.env.GITHUB_TOKEN }) : {};
+  const fresh = live ? await fetchReleases(source,{ token: process.env.GITHUB_TOKEN, strict }) : {};
   const projects = applyReleases(source, fresh, saved);
   const parts=renderProjects(projects);
+  const assetFiles = new Set();
   for(const p of projects.filter(p=>p.showcase)) {
-    for(const scene of [p.showcase,...(p.showcase.scenes||[])]) await readFile('src/assets/'+scene.image);
-    if (p.showcase.video) for (const file of [p.showcase.video.file,p.showcase.video.poster]) await readFile('src/assets/'+file);
-    if (p.page) await readFile('src/assets/'+p.page.icon);
+    for(const scene of [p.showcase,...(p.showcase.scenes||[])]) {
+      assetFiles.add(scene.image);
+      if (scene.image.endsWith('.png')) assetFiles.add(webpName(scene.image));
+    }
+    if (p.showcase.video) {
+      assetFiles.add(p.showcase.video.file);
+      assetFiles.add(p.showcase.video.poster);
+    }
+    if (p.page) {
+      assetFiles.add(p.page.icon);
+      if (p.page.icon.endsWith('.png')) assetFiles.add(webpName(p.page.icon));
+    }
   }
+  await Promise.all([...assetFiles].map(file => access('src/assets/' + file)));
   let html=await readFile('src/index.html','utf8');
-  for(const [slot,key] of [['SPOTLIGHT TABS','tabs'],['SPOTLIGHT PANELS','panels'],['APP STORIES','stories'],['PROJECTS','work'],['DOWNLOADS','downloads'],['FOOTER APPS','footer']]) html=html.replace('<!-- '+slot+' -->',parts[key]);
+  for(const [slot,key] of [['HEAD PRELOADS','headPreloads'],['SPOTLIGHT TABS','tabs'],['SPOTLIGHT PANELS','panels'],['APP STORIES','stories'],['PROJECTS','work'],['DOWNLOADS','downloads'],['FOOTER APPS','footer']]) {
+    const marker = '<!-- ' + slot + ' -->';
+    if (!html.includes(marker)) throw new Error('Missing template slot: ' + slot);
+    html = html.replace(marker, () => parts[key]);
+  }
   await rm('dist',{recursive:true,force:true});
   await mkdir('dist',{recursive:true});
   await writeFile('dist/index.html',html);
@@ -205,7 +235,7 @@ export async function build({ live = process.env.FELARY_RELEASES !== 'offline' }
   const manifest=Object.fromEntries(projects.filter(p=>p.release).map(p=>[p.repo,{tag:p.tag,installer:p.installer,released:p.released||null}]));
   await writeFile('dist/releases.json',JSON.stringify(manifest,null,2)+'\n');
   for(const name of ['style.css','showcase.js','favicon.svg','_headers']) await copyFile('src/'+name,'dist/'+name);
-  await cp('src/assets','dist/assets',{recursive:true});
+  await cp('src/assets','dist/assets',{recursive:true,filter:src=>basename(src)!=='SOURCES.md'});
   await writeFile('dist/404.html','<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Not found · Felary</title><link rel="stylesheet" href="/style.css"><main class="wrap not-found"><h1>Nothing here.</h1><p>This page could not be found.</p><a href="/">Back to Felary</a></main></html>');
   console.log('Built Felary → dist/ ('+projects.filter(p=>p.release).map(p=>p.name+' '+p.tag).join(', ')+(live?'':', saved releases')+')');
 }

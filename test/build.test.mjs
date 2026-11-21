@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { escapeHtml, validateProjects, renderProjects, renderAppPage, pageHref, build } from '../scripts/build.mjs';
 import { nextTabIndex, featureFrameIndex, isRecent } from '../src/showcase.js';
-import { releaseNotes, fromGitHub, fetchReleases, applyReleases } from '../scripts/releases.mjs';
+import { releaseNotes, fromGitHub, fetchReleases, applyReleases, isSafeName } from '../scripts/releases.mjs';
+import { startServer, parseHeaders, headersFor } from '../scripts/serve.mjs';
 const projects = JSON.parse(await readFile(new URL('../src/projects.json',import.meta.url),'utf8'));
 
 test('projects retain source links and exact versioned download URLs', () => {
@@ -139,8 +140,16 @@ test('production includes complete stories, local assets, unique IDs and valid a
     }
   }
   await assert.rejects(readFile('dist/assets/everglow.png'));
-  for(const font of ['barlow-condensed-600','manrope-400','manrope-600']) assert.ok((await readFile('dist/assets/fonts/'+font+'.ttf')).length>10000);
-  assert.ok((await readFile('dist/_headers','utf8')).includes("script-src 'self'"));
+  await assert.rejects(readFile('dist/assets/SOURCES.md'));
+  for(const font of ['barlow-condensed-600','manrope-400','manrope-600']) {
+    const woff2 = await readFile('dist/assets/fonts/'+font+'.woff2');
+    assert.equal(woff2.subarray(0,4).toString(),'wOF2');
+    assert.ok(woff2.length > 5000);
+  }
+  const headersText = await readFile('dist/_headers','utf8');
+  assert.ok(headersText.includes("script-src 'self'"));
+  assert.ok(headersText.includes('Strict-Transport-Security:'));
+  assert.ok(headersText.includes("connect-src 'none'"));
   assert.ok((await readFile('dist/showcase.js','utf8')).includes('aria-selected'));
 });
 
@@ -252,4 +261,113 @@ test('demo videos replace the plate on the homepage and app page, safely', () =>
   assert.ok(page.includes('class="hero-image glacier"><div class="video-frame"><video'));
   assert.ok(page.includes('href="/assets/felaris-demo.mp4">Open the video'));
   for(const bad of [{...video,file:'../x.mp4'},{...video,poster:'x.gif'},{...video,width:0},{...video,caption:''}]) assert.throws(()=>validateProjects([{...p,showcase:{...p.showcase,video:bad}}]));
+});
+
+test('path traversal segments, calendar-invalid dates, and bad extra patterns are rejected', () => {
+  assert.equal(isSafeName('.'), false);
+  assert.equal(isSafeName('..'), false);
+  assert.equal(isSafeName('v1.0.0'), true);
+  const p = projects[0];
+  for (const bad of [
+    { ...p, repo: '..' },
+    { ...p, repo: '.' },
+    { ...p, tag: '..' },
+    { ...p, installer: '../evil.exe' },
+    { ...p, released: '2026-02-31' },
+    { ...p, released: '2026-99-99' },
+    { ...p, page: { ...p.page, extras: [{ label: 'Bad', file: 'a.exe', pattern: '(' }] } },
+  ]) assert.throws(() => validateProjects([bad]));
+  const sf = projects.find(x => x.repo === 'SpeakFlow');
+  assert.equal(fromGitHub(sf, githubRelease({ tag_name: '..' })), null);
+  assert.equal(fromGitHub({ ...sf, release: { installer: '.*' } }, githubRelease({ assets: [{ name: 'payload.msi' }] })), null);
+});
+
+test('fetchReleases retries transient 5xx errors and strict mode fails on errors', async () => {
+  const sf = projects.find(p => p.repo === 'SpeakFlow');
+  let calls = 0;
+  const res = await fetchReleases([sf], {
+    retries: 2,
+    retryDelayMs: 0,
+    fetchImpl: async () => {
+      calls++;
+      if (calls < 3) return { ok: false, status: 503 };
+      return { ok: true, status: 200, json: async () => githubRelease() };
+    },
+  });
+  assert.equal(calls, 3);
+  assert.equal(res.SpeakFlow.tag, '2.0.0');
+  await assert.rejects(
+    fetchReleases([sf], { strict: true, retries: 0, fetchImpl: async () => ({ ok: false, status: 500 }) }),
+    /strict mode/
+  );
+});
+
+test('applyReleases drops extra assets that are no longer in the new release', () => {
+  const felaris = projects.find(p => p.repo === 'Felaris');
+  const merged = applyReleases([felaris], {
+    Felaris: { tag: 'v0.9.0', version: '0.9.0', installer: 'felaris-setup.exe', extras: [], released: '2026-11-01', notes: [] },
+  });
+  assert.deepEqual(merged[0].page.extras, []);
+  const html = renderAppPage(merged[0], merged);
+  assert.ok(!html.includes('/releases/download/v0.9.0/felaris.exe'));
+});
+
+test('hidden spotlight videos defer preloading and hero media is preloaded', () => {
+  const { panels, headPreloads } = renderProjects(projects);
+  const panelList = panels.split('\n');
+  assert.ok(panelList[0].includes('autoplay muted loop playsinline controls preload="metadata"'));
+  const cinderPanel = panelList.find(line => line.includes('id="spotlight-cinder"'));
+  assert.ok(cinderPanel.includes('preload="none"'));
+  assert.ok(!cinderPanel.includes('autoplay'));
+  assert.ok(headPreloads.includes('rel="preload"'));
+  assert.ok(headPreloads.includes('/assets/felaris-poster.jpg'));
+});
+
+test('dev server serves media, json, range requests, and per-path cache headers safely', async () => {
+  await build({ live: false });
+  const server = await startServer({ port: 0, host: '127.0.0.1', rebuild: false });
+  try {
+    const { port } = server.address();
+    const baseUrl = `http://127.0.0.1:${port}`;
+    const home = await fetch(baseUrl + '/');
+    assert.equal(home.status, 200);
+    assert.ok(!home.headers.get('content-security-policy').includes('upgrade-insecure-requests'));
+
+    const rel = await fetch(baseUrl + '/releases.json');
+    assert.equal(rel.status, 200);
+    assert.equal(rel.headers.get('content-type'), 'application/json; charset=utf-8');
+    assert.equal(rel.headers.get('cache-control'), 'no-cache');
+
+    const font = await fetch(baseUrl + '/assets/fonts/barlow-condensed-600.woff2');
+    assert.equal(font.status, 200);
+    assert.equal(font.headers.get('content-type'), 'font/woff2');
+    assert.equal(font.headers.get('cache-control'), 'public, max-age=31536000, immutable');
+
+    const poster = await fetch(baseUrl + '/assets/felaris-poster.jpg');
+    assert.equal(poster.status, 200);
+    assert.equal(poster.headers.get('content-type'), 'image/jpeg');
+
+    const webp = await fetch(baseUrl + '/assets/felaris-home.webp');
+    assert.equal(webp.status, 200);
+    assert.equal(webp.headers.get('content-type'), 'image/webp');
+
+    const videoRange = await fetch(baseUrl + '/assets/felaris-demo.mp4', { headers: { Range: 'bytes=0-1023' } });
+    assert.equal(videoRange.status, 206);
+    assert.equal(videoRange.headers.get('content-type'), 'video/mp4');
+    assert.match(videoRange.headers.get('content-range'), /^bytes 0-1023\/\d+$/);
+    assert.equal((await videoRange.arrayBuffer()).byteLength, 1024);
+
+    const badRange = await fetch(baseUrl + '/assets/felaris-demo.mp4', { headers: { Range: 'bytes=999999999-' } });
+    assert.equal(badRange.status, 416);
+
+    const sources = await fetch(baseUrl + '/assets/SOURCES.md');
+    assert.equal(sources.status, 404);
+
+    const rules = parseHeaders('/*\n  X-A: 1\n/assets/*\n  Cache-Control: public\n');
+    assert.equal(headersFor('/assets/a.png', rules)['Cache-Control'], 'public');
+    assert.equal(headersFor('/', rules)['Cache-Control'], undefined);
+  } finally {
+    server.closeAllConnections();
+    await new Promise(resolveClose => server.close(resolveClose));
+  }
 });
