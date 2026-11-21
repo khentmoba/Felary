@@ -23,14 +23,15 @@ jobs:
   deploy:
     name: Build & Deploy to Cloudflare Pages
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           ref: main
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22
 
@@ -44,12 +45,13 @@ jobs:
         run: npm run build
         env:
           GITHUB_TOKEN: ${{ github.token }}
+          FELARY_RELEASES: strict
 
       - name: Skip if no app has a new release
         id: changes
         if: github.event_name == 'schedule'
         run: |
-          if curl -fsS https://felary.pages.dev/releases.json -o live-releases.json && cmp -s live-releases.json dist/releases.json; then
+          if curl -fsS --connect-timeout 10 --max-time 30 https://felary.pages.dev/releases.json -o live-releases.json && cmp -s live-releases.json dist/releases.json; then
             echo "No new releases since the last deploy."
             echo "deploy=false" >> "$GITHUB_OUTPUT"
           else

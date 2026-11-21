@@ -115,18 +115,27 @@ export function initFeatureStory(root) {
     const extra=Math.ceil(pin+figure.offsetHeight-readingLine(pin)-below+8);
     if (extra>0) body.style.paddingBottom=extra+'px';
   };
+  let resizeFrame = 0;
+  const scheduleConfigure = () => {
+    if (resizeFrame) return;
+    resizeFrame = requestAnimationFrame(() => {
+      resizeFrame = 0;
+      configure();
+    });
+  };
   const configure=()=>{
     observers.forEach(o=>o.disconnect());
     observers=[];
     const enabled=layout.matches && CSS.supports('animation-timeline: view()');
     root.dataset.sceneScroll=String(enabled);
     sizeTail(enabled);
-    if (enabled) {
+    if (enabled && innerHeight > 0) {
       // One line where the picture pins, one where features are read.
       const pin=parseFloat(getComputedStyle(figure).top)||0;
       const watch=(line,targets)=>{
-        const top=Math.round(line);
-        const observer=new IntersectionObserver(update,{rootMargin:`-${top}px 0px -${innerHeight-top-1}px 0px`,threshold:0});
+        const top=Math.min(Math.max(0,Math.round(line)),innerHeight-1);
+        const bottom=Math.max(0,innerHeight-top-1);
+        const observer=new IntersectionObserver(update,{rootMargin:`-${top}px 0px -${bottom}px 0px`,threshold:0});
         targets.forEach(el=>observer.observe(el));
         observers.push(observer);
       };
@@ -136,7 +145,7 @@ export function initFeatureStory(root) {
     update();
   };
   layout.addEventListener('change',configure);
-  window.addEventListener('resize',configure);
+  window.addEventListener('resize',scheduleConfigure);
   window.addEventListener('hashchange',update);
   configure();
 }
@@ -150,7 +159,7 @@ const icons={
 
 // Muted, looping demo videos that only play while visible, never against a reduced-motion preference,
 // and stop for good once the visitor pauses them.
-export function initDemoVideo(video, videos, still) {
+export function initDemoVideo(video, videos, still, motionQuery) {
   const frame=video.parentElement;
   let held=still;
   video.controls=false;
@@ -174,6 +183,7 @@ export function initDemoVideo(video, videos, still) {
     sound.setAttribute('aria-pressed',String(!video.muted));
   };
   let visible=false;
+  let observer=null;
   const settle=()=>{ if (visible && !held) video.play().catch(()=>{}); else video.pause(); };
   toggle.addEventListener('click',()=>{ held=!video.paused; if (!held) video.play().catch(()=>{}); else video.pause(); });
   sound.addEventListener('click',()=>{
@@ -184,9 +194,22 @@ export function initDemoVideo(video, videos, still) {
       video.play().catch(()=>{});
     }
   });
+  video.addEventListener('error',()=>{
+    observer?.disconnect();
+    const message=document.createElement('p');
+    message.className='image-error';
+    message.textContent='Demo video unavailable. Read the introduction below or explore the app on GitHub.';
+    frame.replaceWith(message);
+  },{once:true});
   ['play','pause','volumechange'].forEach(type=>video.addEventListener(type,paint));
   if (still) { video.removeAttribute('autoplay'); video.pause(); }
-  if (typeof IntersectionObserver !== 'undefined') new IntersectionObserver(entries=>{ visible=entries[0].isIntersecting; settle(); },{threshold:.35}).observe(frame);
+  motionQuery?.addEventListener('change',event=>{
+    if (event.matches) { held=true; video.pause(); }
+  });
+  if (typeof IntersectionObserver !== 'undefined') {
+    observer=new IntersectionObserver(entries=>{ visible=entries[0].isIntersecting; settle(); },{threshold:.35});
+    observer.observe(frame);
+  }
   paint();
 }
 
@@ -197,15 +220,15 @@ if (typeof document !== 'undefined') {
       const message = document.createElement('p');
       message.className = 'image-error';
       message.textContent = 'Preview unavailable. Read the introduction below or explore the app on GitHub.';
-      img.replaceWith(message);
+      (img.closest('picture') || img).replaceWith(message);
     };
     img.addEventListener('error', fallback, { once: true });
     if (img.complete && !img.naturalWidth) fallback();
   });
   document.querySelectorAll('.app-story').forEach(initFeatureStory);
   const videos=[...document.querySelectorAll('video.demo-video')];
-  const still=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  videos.forEach(video=>initDemoVideo(video,videos,still));
+  const motionQuery=matchMedia('(prefers-reduced-motion: reduce)');
+  videos.forEach(video=>initDemoVideo(video,videos,motionQuery.matches,motionQuery));
   // Release dates are baked in at build time; "New" depends on today, so it is decided here.
   document.querySelectorAll('.download time[data-released]').forEach(time => {
     if (!isRecent(time.dateTime, Date.now())) return;
